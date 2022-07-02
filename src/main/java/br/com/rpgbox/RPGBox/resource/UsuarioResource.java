@@ -2,6 +2,7 @@ package br.com.rpgbox.RPGBox.resource;
 
 import br.com.rpgbox.RPGBox.VO.RespostaVO;
 import br.com.rpgbox.RPGBox.entity.Usuario;
+import br.com.rpgbox.RPGBox.exception.UsuarioJaCadastradoException;
 import br.com.rpgbox.RPGBox.service.UsuarioService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -32,7 +33,11 @@ public class UsuarioResource {
             usuarioService.criarNovoUsuario(novoUsuario);
             respostaRequisicao.setMensagem("Usuário inserido com sucesso!");
             return ResponseEntity.ok(respostaRequisicao);
-        }catch(Exception e) {
+        } catch(UsuarioJaCadastradoException e) {
+            e.printStackTrace();
+            respostaRequisicao.setMensagem(e.getMessage());
+            return ResponseEntity.badRequest().body(respostaRequisicao);
+        } catch(Exception e) {
             e.printStackTrace();
             respostaRequisicao.setMensagem("Não conseguimos processar a requisição. Tente novamente mais tarde!");
             return ResponseEntity.badRequest().body(respostaRequisicao);
