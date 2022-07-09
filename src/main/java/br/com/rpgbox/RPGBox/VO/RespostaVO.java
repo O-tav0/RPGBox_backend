@@ -6,4 +6,5 @@ import lombok.Data;
 public class RespostaVO {
 
     private String mensagem;
+    private Object objetoResposta;
 }

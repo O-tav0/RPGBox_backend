@@ -24,7 +24,8 @@ public class UsuarioResource {
     @PostMapping(path="/novo", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "novo", notes = "Incluir novo usuário no banco de dados")
     @ApiResponses(value = { @ApiResponse(code = 500, message = "Erro interno"),
-            @ApiResponse(code = 200, message = "Requisição concluída com sucesso") })
+            @ApiResponse(code = 200, message = "Requisição concluída com sucesso"),
+            @ApiResponse(code = 200, message = "Usuario já cadastrado no banco")})
     public ResponseEntity<RespostaVO> criarNovoUsuario(@RequestBody Usuario novoUsuario) {
         respostaRequisicao = new RespostaVO();
 

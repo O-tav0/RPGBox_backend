@@ -6,6 +6,8 @@ import br.com.rpgbox.RPGBox.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class UsuarioService {
 
@@ -19,5 +21,13 @@ public class UsuarioService {
             usuarioRepository.save(usuario);
         }
 
+    }
+
+    public Optional<Usuario> buscarUsuarioPorEmail(String emailUsuario) {
+        return usuarioRepository.findByEmailUsuario(emailUsuario);
+    }
+
+    public Optional<Usuario> buscarUsuarioPorId(Long sqUsuario) {
+        return usuarioRepository.findById(sqUsuario);
     }
 }
