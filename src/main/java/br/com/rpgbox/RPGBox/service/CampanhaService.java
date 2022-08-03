@@ -33,8 +33,8 @@ public class CampanhaService {
         campanhaRepository.save(novaCampanha);
     }
 
-    public List<Campanha> buscarCampanhasDoUsuario(Long sqUsuario) {
-        Usuario usuario = usuarioService.buscarUsuarioPorId(sqUsuario).orElseThrow(EntityNotFoundException::new);
+    public List<Campanha> buscarCampanhasDoUsuario(String email) {
+        Usuario usuario = usuarioService.buscarUsuarioPorEmail(email).orElseThrow(EntityNotFoundException::new);
         return campanhaRepository.findByUsuario(usuario);
     }
 }

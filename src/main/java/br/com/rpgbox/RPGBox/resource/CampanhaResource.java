@@ -51,17 +51,17 @@ public class CampanhaResource {
 
     }
 
-    @GetMapping(path="/campanhas{sqUsuario}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path="/{emailUsuario}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "novo", notes = "Lista todas as campanhas cadastradas de determinado usuário")
     @ApiResponses(value = { @ApiResponse(code = 500, message = "Erro interno"),
             @ApiResponse(code = 200, message = "Requisição concluída com sucesso"),
             @ApiResponse(code = 400, message = "Problema no processamento")})
-    public ResponseEntity<RespostaVO> criarNovaCampanha(@PathVariable Long sqUsuario) {
+    public ResponseEntity<RespostaVO> criarNovaCampanha(@PathVariable String emailUsuario) {
         respostaRequisicao = new RespostaVO();
         List<Campanha> campanhasDoUsuario = new ArrayList<Campanha>();
 
         try {
-            campanhasDoUsuario = campanhaService.buscarCampanhasDoUsuario(sqUsuario);
+            campanhasDoUsuario = campanhaService.buscarCampanhasDoUsuario(emailUsuario);
             respostaRequisicao.setObjetoResposta(campanhasDoUsuario);
             return ResponseEntity.ok(respostaRequisicao);
         } catch(Exception e) {
