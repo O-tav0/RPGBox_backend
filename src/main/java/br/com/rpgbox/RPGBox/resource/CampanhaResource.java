@@ -1,10 +1,9 @@
 package br.com.rpgbox.RPGBox.resource;
 
+import br.com.rpgbox.RPGBox.DTO.CampanhaDTO;
 import br.com.rpgbox.RPGBox.VO.CampanhaVO;
 import br.com.rpgbox.RPGBox.VO.RespostaVO;
 import br.com.rpgbox.RPGBox.entity.Campanha;
-import br.com.rpgbox.RPGBox.entity.Usuario;
-import br.com.rpgbox.RPGBox.exception.UsuarioJaCadastradoException;
 import br.com.rpgbox.RPGBox.service.CampanhaService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -58,7 +57,7 @@ public class CampanhaResource {
             @ApiResponse(code = 400, message = "Problema no processamento")})
     public ResponseEntity<RespostaVO> criarNovaCampanha(@PathVariable String emailUsuario) {
         respostaRequisicao = new RespostaVO();
-        List<Campanha> campanhasDoUsuario = new ArrayList<Campanha>();
+        List<CampanhaDTO> campanhasDoUsuario = new ArrayList<CampanhaDTO>();
 
         try {
             campanhasDoUsuario = campanhaService.buscarCampanhasDoUsuario(emailUsuario);
