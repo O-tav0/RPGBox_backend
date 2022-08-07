@@ -4,8 +4,10 @@ import br.com.rpgbox.RPGBox.DTO.CampanhaDTO;
 import br.com.rpgbox.RPGBox.VO.CampanhaVO;
 import br.com.rpgbox.RPGBox.entity.Campanha;
 import br.com.rpgbox.RPGBox.entity.EventoCampanha;
+import br.com.rpgbox.RPGBox.entity.Personagem;
 import br.com.rpgbox.RPGBox.entity.Usuario;
 import br.com.rpgbox.RPGBox.repository.CampanhaRepository;
+import br.com.rpgbox.RPGBox.repository.PersonagemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,9 @@ public class CampanhaService {
 
     @Autowired
     private EventoCampanhaService eventoCampanhaService;
+
+    @Autowired
+    private PersonagemRepository personagemRepository;
 
     public void criarNovaCampanha(CampanhaVO campanhaVO) {
 
@@ -77,4 +82,16 @@ public class CampanhaService {
 
         return listaResposta;
     }
+
+    public Campanha buscarCampanhaPorId(Long sqCampanha) {
+        return campanhaRepository.findById(sqCampanha).get();
+    }
+
+    public List<Personagem> buscarPersonagensDaCampanha(Long sqCampanha) {
+        Campanha campanha = campanhaRepository.findById(sqCampanha).get();
+
+        return personagemRepository.findAllByCampanha(campanha);
+    }
+
+
 }

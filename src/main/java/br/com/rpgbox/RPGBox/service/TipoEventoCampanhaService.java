@@ -1,6 +1,6 @@
 package br.com.rpgbox.RPGBox.service;
 
-import br.com.rpgbox.RPGBox.Enum.EnumTipoEventoCampanha;
+import br.com.rpgbox.RPGBox.enums.EnumTipoEventoCampanha;
 import br.com.rpgbox.RPGBox.entity.TipoEventoCampanha;
 import br.com.rpgbox.RPGBox.repository.TipoEventoCampanhaRepository;
 import org.springframework.beans.factory.annotation.Autowired;

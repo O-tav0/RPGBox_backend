@@ -6,13 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="TB_PERSONAGEM")
+@Table(name="tb_personagem")
 public class Personagem {
 
     @Id
@@ -44,5 +45,12 @@ public class Personagem {
 
     @Column(name="NR_NIVEL_PERSONAGEM")
     private Integer nivelPersonagem;
+
+    @OneToMany(mappedBy = "personagem")
+    private List<Habilidade> habilidadesPersonagem;
+
+    public Personagem(Campanha campanha) {
+        this.campanha = campanha;
+    }
 
 }

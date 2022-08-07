@@ -1,10 +1,13 @@
 package br.com.rpgbox.RPGBox.resource;
 
 import br.com.rpgbox.RPGBox.DTO.CampanhaDTO;
+import br.com.rpgbox.RPGBox.DTO.PersonagemDTO;
 import br.com.rpgbox.RPGBox.VO.CampanhaVO;
 import br.com.rpgbox.RPGBox.VO.RespostaVO;
 import br.com.rpgbox.RPGBox.entity.Campanha;
+import br.com.rpgbox.RPGBox.entity.Personagem;
 import br.com.rpgbox.RPGBox.service.CampanhaService;
+import br.com.rpgbox.RPGBox.service.PersonagemService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -23,6 +26,9 @@ public class CampanhaResource {
 
     @Autowired
     private CampanhaService campanhaService;
+
+    @Autowired
+    private PersonagemService personagemService;
 
     private RespostaVO respostaRequisicao;
 
@@ -68,6 +74,36 @@ public class CampanhaResource {
             respostaRequisicao.setMensagem(e.getMessage());
             return ResponseEntity.badRequest().body(respostaRequisicao);
         }
-
     }
+
+    @GetMapping(path="/{sqCampanha}/personagens", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "novo", notes = "Busca todos os personagens de uma determinada campanha")
+    @ApiResponses(value = { @ApiResponse(code = 500, message = "Erro interno"),
+            @ApiResponse(code = 200, message = "Requisição concluída com sucesso"),
+            @ApiResponse(code = 400, message = "Problema no processamento")})
+    public ResponseEntity<RespostaVO> recuperarPersonagensDaCampanha(@PathVariable Long sqCampanha) {
+
+        respostaRequisicao = new RespostaVO();
+
+        try {
+            List<PersonagemDTO> listaRetorno = montarRetornoPersonagensCampanha(campanhaService.buscarPersonagensDaCampanha(sqCampanha));
+            respostaRequisicao.setObjetoResposta(listaRetorno);
+            return ResponseEntity.ok(respostaRequisicao);
+
+        }catch(Exception e) {
+            e.printStackTrace();
+            respostaRequisicao.setMensagem(e.getMessage());
+            return ResponseEntity.badRequest().body(respostaRequisicao);
+        }
+    }
+
+    public List<PersonagemDTO> montarRetornoPersonagensCampanha(List<Personagem> listaDePersonagens) {
+        List<PersonagemDTO> dto = new ArrayList<PersonagemDTO>();
+
+        for(Personagem personagem: listaDePersonagens) {
+            dto.add(personagemService.converteEmDTO(personagem));
+        }
+        return dto;
+    }
+
 }

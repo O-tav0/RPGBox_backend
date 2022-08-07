@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -34,4 +35,7 @@ public class Combate {
     @JoinColumn(name="ST_COMBATE")
     @OneToOne
     private StatusCombate statusCombate;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sqCombate")
+    private List<PersonagemCombate> personagensDoCombate;
 }

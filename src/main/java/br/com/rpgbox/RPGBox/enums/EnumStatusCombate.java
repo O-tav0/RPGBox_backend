@@ -1,4 +1,4 @@
-package br.com.rpgbox.RPGBox.Enum;
+package br.com.rpgbox.RPGBox.enums;
 
 public class EnumStatusCombate {
 
