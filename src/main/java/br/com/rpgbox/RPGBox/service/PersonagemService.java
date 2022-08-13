@@ -8,9 +8,11 @@ import br.com.rpgbox.RPGBox.entity.Campanha;
 import br.com.rpgbox.RPGBox.entity.Habilidade;
 import br.com.rpgbox.RPGBox.entity.Personagem;
 import br.com.rpgbox.RPGBox.enums.EnumTipoHabilidade;
+import br.com.rpgbox.RPGBox.enums.EnumTipoPersonagem;
 import br.com.rpgbox.RPGBox.repository.HabilidadeRepository;
 import br.com.rpgbox.RPGBox.repository.PersonagemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -39,6 +41,15 @@ public class PersonagemService {
 
     @Autowired
     private HabilidadeService habilidadeService;
+
+    @Value("${imagem.aventureiro}")
+    private String imgDefaultAventureiro;
+
+    @Value("${imagem.npc}")
+    private String imgDefaultNpc;
+
+    @Value("${imagem.inimigo}")
+    private String imgDefaultInimigo;
 
     public void criarNovoPersonagem(PersonagemVO vo) {
 
@@ -76,7 +87,7 @@ public class PersonagemService {
         novoPersonagem.setNomePersonagem(vo.getNomePersonagem());
         novoPersonagem.setNivelPersonagem(vo.getNivelPersonagem());
         novoPersonagem.setClassePersonagem(vo.getClassePersonagem());
-        novoPersonagem.setImagemPersonagem(vo.getImagem());
+        novoPersonagem.setImagemPersonagem(tratarImagemPersonagem(vo.getImagem(), vo.getTipoPersonagem()));
         novoPersonagem.setRacaPersonagem(vo.getRacaPersonagem());
         novoPersonagem.setTipoPersonagem(tipoPersonagemService.buscarTipoPersonagem(vo.getTipoPersonagem()));
         novoPersonagem.setPontosDeVida(vo.getPontosVida());
@@ -118,5 +129,21 @@ public class PersonagemService {
         dto.setPontosDeVida(personagem.getPontosDeVida());
 
         return dto;
+    }
+
+    public String tratarImagemPersonagem(String imagemEnviada, EnumTipoPersonagem.TipoPersonagemEnum tipoDoPersonagem) {
+
+        String imgRetorno = imagemEnviada;
+
+        if(imagemEnviada == null || imagemEnviada.equals("")) {
+            if (tipoDoPersonagem.equals(EnumTipoPersonagem.TipoPersonagemEnum.AVENTUREIRO)) {
+                imgRetorno = imgDefaultAventureiro;
+            } else if (tipoDoPersonagem.equals(EnumTipoPersonagem.TipoPersonagemEnum.NPC)) {
+                imgRetorno = imgDefaultNpc;
+            } else if (tipoDoPersonagem.equals(EnumTipoPersonagem.TipoPersonagemEnum.INIMIGO)) {
+                imgRetorno = imgDefaultInimigo;
+            }
+        }
+        return imgRetorno;
     }
 }
