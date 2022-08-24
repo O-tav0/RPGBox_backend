@@ -7,10 +7,10 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name="TB_EVENTO_CAMPANHA")
@@ -42,4 +42,16 @@ public class EventoCampanha {
     @JoinColumn(name="SQ_ANOTACAO")
     @OneToOne
     private Anotacao anotacao;
+
+    public Boolean isEventoPersonagem() {
+        return Objects.nonNull(getPersonagem());
+    }
+
+    public Boolean isEventoCombate() {
+        return Objects.nonNull(getCombate());
+    }
+
+    public Boolean isEventoAnotacao() {
+        return Objects.nonNull(getAnotacao());
+    }
 }
