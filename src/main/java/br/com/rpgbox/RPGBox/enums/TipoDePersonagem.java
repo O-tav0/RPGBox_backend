@@ -1,6 +1,6 @@
 package br.com.rpgbox.RPGBox.enums;
 
-public class EnumTipoPersonagem {
+public class TipoDePersonagem {
 
     private final TipoPersonagemEnum descricaoTipoPersonagem;
 
@@ -10,7 +10,7 @@ public class EnumTipoPersonagem {
         INIMIGO
     }
 
-    public EnumTipoPersonagem(TipoPersonagemEnum descricaoTipoPersonagem) {
+    public TipoDePersonagem(TipoPersonagemEnum descricaoTipoPersonagem) {
         this.descricaoTipoPersonagem = descricaoTipoPersonagem;
     }
 

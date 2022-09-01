@@ -2,6 +2,7 @@ package br.com.rpgbox.RPGBox.resource;
 
 import br.com.rpgbox.RPGBox.DTO.CampanhaDTO;
 import br.com.rpgbox.RPGBox.DTO.PersonagemDTO;
+import br.com.rpgbox.RPGBox.DTO.PersonagensCampanhaDTO;
 import br.com.rpgbox.RPGBox.VO.CampanhaVO;
 import br.com.rpgbox.RPGBox.VO.RespostaVO;
 import br.com.rpgbox.RPGBox.entity.Campanha;
@@ -88,6 +89,27 @@ public class CampanhaResource {
         try {
             List<PersonagemDTO> listaRetorno = montarRetornoPersonagensCampanha(campanhaService.buscarPersonagensDaCampanha(sqCampanha));
             respostaRequisicao.setObjetoResposta(listaRetorno);
+            return ResponseEntity.ok(respostaRequisicao);
+
+        }catch(Exception e) {
+            e.printStackTrace();
+            respostaRequisicao.setMensagem(e.getMessage());
+            return ResponseEntity.badRequest().body(respostaRequisicao);
+        }
+    }
+
+    @GetMapping(path="/{sqCampanha}/personagens-por-tipo", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "novo", notes = "Busca todos os personagens de uma determinada campanha, e os separa pelo tipo")
+    @ApiResponses(value = { @ApiResponse(code = 500, message = "Erro interno"),
+            @ApiResponse(code = 200, message = "Requisição concluída com sucesso"),
+            @ApiResponse(code = 400, message = "Problema no processamento")})
+    public ResponseEntity<RespostaVO> recuperarPersonagensDaCampanhaPorTipo(@PathVariable Long sqCampanha) {
+
+        respostaRequisicao = new RespostaVO();
+
+        try {
+            PersonagensCampanhaDTO retorno = campanhaService.buscarPersonagensPorTipo(sqCampanha);
+            respostaRequisicao.setObjetoResposta(retorno);
             return ResponseEntity.ok(respostaRequisicao);
 
         }catch(Exception e) {

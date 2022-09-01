@@ -1,6 +1,6 @@
 package br.com.rpgbox.RPGBox.VO;
 
-import br.com.rpgbox.RPGBox.enums.EnumTipoPersonagem;
+import br.com.rpgbox.RPGBox.enums.TipoDePersonagem;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,7 +16,7 @@ public class PersonagemVO {
     private Long sqCampanha;
     private Integer pontosVida;
     private String imagem;
-    private EnumTipoPersonagem.TipoPersonagemEnum tipoPersonagem;
+    private TipoDePersonagem.TipoPersonagemEnum tipoPersonagem;
     private Integer nivelPersonagem;
     private List<HabilidadeVO> habilidadesPersonagem;
 }

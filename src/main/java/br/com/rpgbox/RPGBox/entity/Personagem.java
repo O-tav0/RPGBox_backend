@@ -1,5 +1,6 @@
 package br.com.rpgbox.RPGBox.entity;
 
+import br.com.rpgbox.RPGBox.enums.TipoDePersonagem;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -51,6 +52,24 @@ public class Personagem {
 
     public Personagem(Campanha campanha) {
         this.campanha = campanha;
+    }
+
+    public Boolean isAventureiro() {
+        TipoDePersonagem aventureiro = new TipoDePersonagem(TipoDePersonagem.TipoPersonagemEnum.AVENTUREIRO);
+        return this.getTipoPersonagem().getSqTipoPersonagem() == aventureiro.getCodigoTipoPersonagem().longValue();
+
+    }
+
+    public Boolean isNpc() {
+        TipoDePersonagem npc = new TipoDePersonagem(TipoDePersonagem.TipoPersonagemEnum.NPC);
+        return this.getTipoPersonagem().getSqTipoPersonagem() == npc.getCodigoTipoPersonagem().longValue();
+
+    }
+
+    public Boolean isInimigo() {
+        TipoDePersonagem inimigo = new TipoDePersonagem(TipoDePersonagem.TipoPersonagemEnum.INIMIGO);
+        return this.getTipoPersonagem().getSqTipoPersonagem() == inimigo.getCodigoTipoPersonagem().longValue();
+
     }
 
 }

@@ -7,8 +7,7 @@ import br.com.rpgbox.RPGBox.VO.PersonagemVO;
 import br.com.rpgbox.RPGBox.entity.Campanha;
 import br.com.rpgbox.RPGBox.entity.Habilidade;
 import br.com.rpgbox.RPGBox.entity.Personagem;
-import br.com.rpgbox.RPGBox.enums.EnumTipoHabilidade;
-import br.com.rpgbox.RPGBox.enums.EnumTipoPersonagem;
+import br.com.rpgbox.RPGBox.enums.TipoDePersonagem;
 import br.com.rpgbox.RPGBox.repository.HabilidadeRepository;
 import br.com.rpgbox.RPGBox.repository.PersonagemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,16 +130,16 @@ public class PersonagemService {
         return dto;
     }
 
-    public String tratarImagemPersonagem(String imagemEnviada, EnumTipoPersonagem.TipoPersonagemEnum tipoDoPersonagem) {
+    public String tratarImagemPersonagem(String imagemEnviada, TipoDePersonagem.TipoPersonagemEnum tipoDoPersonagem) {
 
         String imgRetorno = imagemEnviada;
 
         if(imagemEnviada == null || imagemEnviada.equals("")) {
-            if (tipoDoPersonagem.equals(EnumTipoPersonagem.TipoPersonagemEnum.AVENTUREIRO)) {
+            if (tipoDoPersonagem.equals(TipoDePersonagem.TipoPersonagemEnum.AVENTUREIRO)) {
                 imgRetorno = imgDefaultAventureiro;
-            } else if (tipoDoPersonagem.equals(EnumTipoPersonagem.TipoPersonagemEnum.NPC)) {
+            } else if (tipoDoPersonagem.equals(TipoDePersonagem.TipoPersonagemEnum.NPC)) {
                 imgRetorno = imgDefaultNpc;
-            } else if (tipoDoPersonagem.equals(EnumTipoPersonagem.TipoPersonagemEnum.INIMIGO)) {
+            } else if (tipoDoPersonagem.equals(TipoDePersonagem.TipoPersonagemEnum.INIMIGO)) {
                 imgRetorno = imgDefaultInimigo;
             }
         }

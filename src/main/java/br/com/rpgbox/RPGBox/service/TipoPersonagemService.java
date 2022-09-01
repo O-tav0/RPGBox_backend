@@ -1,6 +1,6 @@
 package br.com.rpgbox.RPGBox.service;
 
-import br.com.rpgbox.RPGBox.enums.EnumTipoPersonagem;
+import br.com.rpgbox.RPGBox.enums.TipoDePersonagem;
 import br.com.rpgbox.RPGBox.entity.TipoPersonagem;
 import br.com.rpgbox.RPGBox.repository.TipoPersonagemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +12,8 @@ public class TipoPersonagemService {
     @Autowired
     private TipoPersonagemRepository tipoPersonagemRepository;
 
-    public TipoPersonagem buscarTipoPersonagem(EnumTipoPersonagem.TipoPersonagemEnum descricao) {
-        EnumTipoPersonagem enumTipo = new EnumTipoPersonagem(descricao);
+    public TipoPersonagem buscarTipoPersonagem(TipoDePersonagem.TipoPersonagemEnum descricao) {
+        TipoDePersonagem enumTipo = new TipoDePersonagem(descricao);
 
         return tipoPersonagemRepository.findById(enumTipo.getCodigoTipoPersonagem().longValue()).get();
     }

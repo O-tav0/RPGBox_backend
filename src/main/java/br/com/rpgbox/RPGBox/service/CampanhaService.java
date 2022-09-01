@@ -1,6 +1,8 @@
 package br.com.rpgbox.RPGBox.service;
 
 import br.com.rpgbox.RPGBox.DTO.CampanhaDTO;
+import br.com.rpgbox.RPGBox.DTO.PersonagemDTO;
+import br.com.rpgbox.RPGBox.DTO.PersonagensCampanhaDTO;
 import br.com.rpgbox.RPGBox.VO.CampanhaVO;
 import br.com.rpgbox.RPGBox.entity.Campanha;
 import br.com.rpgbox.RPGBox.entity.EventoCampanha;
@@ -30,6 +32,9 @@ public class CampanhaService {
 
     @Autowired
     private PersonagemRepository personagemRepository;
+
+    @Autowired
+    private PersonagemService personagemService;
 
     public void criarNovaCampanha(CampanhaVO campanhaVO) {
 
@@ -87,11 +92,40 @@ public class CampanhaService {
         return campanhaRepository.findById(sqCampanha).get();
     }
 
+    public PersonagensCampanhaDTO buscarPersonagensPorTipo(Long sqCampanha) {
+        List<Personagem> personagens = buscarPersonagensDaCampanha(sqCampanha);
+        List<PersonagemDTO> aventureiros = new ArrayList<PersonagemDTO>();
+        List<PersonagemDTO> inimigos = new ArrayList<PersonagemDTO>();
+        List<PersonagemDTO> npcs = new ArrayList<PersonagemDTO>();
+
+        PersonagensCampanhaDTO resposta = new PersonagensCampanhaDTO();
+
+        for(Personagem personagem: personagens) {
+            if(personagem.isAventureiro()) {
+                aventureiros.add(personagemService.converteEmDTO(personagem));
+            }
+            else if(personagem.isNpc()) {
+                inimigos.add(personagemService.converteEmDTO(personagem));
+            }
+            else if(personagem.isInimigo()) {
+                npcs.add(personagemService.converteEmDTO(personagem));
+            }
+        }
+
+        resposta.setAventureiros(aventureiros);
+        resposta.setInimigos(inimigos);
+        resposta.setNpcs(npcs);
+
+        return resposta;
+    }
+
     public List<Personagem> buscarPersonagensDaCampanha(Long sqCampanha) {
         Campanha campanha = campanhaRepository.findById(sqCampanha).get();
 
         return personagemRepository.findAllByCampanha(campanha);
     }
+
+
 
 
 }
