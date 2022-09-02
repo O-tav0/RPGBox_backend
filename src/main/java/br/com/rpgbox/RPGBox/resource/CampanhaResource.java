@@ -119,6 +119,29 @@ public class CampanhaResource {
         }
     }
 
+    @GetMapping(path="/informacoes-gerais/{sqCampanha}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "novo", notes = "Busca todos os personagens de uma determinada campanha, e os separa pelo tipo")
+    @ApiResponses(value = { @ApiResponse(code = 500, message = "Erro interno"),
+            @ApiResponse(code = 200, message = "Requisição concluída com sucesso"),
+            @ApiResponse(code = 400, message = "Problema no processamento")})
+    public ResponseEntity<RespostaVO> recuperaCampanhaPorSqCampanha(@PathVariable Long sqCampanha) {
+
+        respostaRequisicao = new RespostaVO();
+        CampanhaDTO retorno = new CampanhaDTO();
+
+        try {
+            Campanha campanha = campanhaService.buscarCampanhaPorId(sqCampanha);
+            retorno = campanhaService.converteEmDTO(campanha);
+            respostaRequisicao.setObjetoResposta(retorno);
+            return ResponseEntity.ok(respostaRequisicao);
+
+        }catch(Exception e) {
+            e.printStackTrace();
+            respostaRequisicao.setMensagem(e.getMessage());
+            return ResponseEntity.badRequest().body(respostaRequisicao);
+        }
+    }
+
     public List<PersonagemDTO> montarRetornoPersonagensCampanha(List<Personagem> listaDePersonagens) {
         List<PersonagemDTO> dto = new ArrayList<PersonagemDTO>();
 

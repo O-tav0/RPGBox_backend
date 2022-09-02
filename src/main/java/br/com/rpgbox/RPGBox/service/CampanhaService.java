@@ -70,17 +70,10 @@ public class CampanhaService {
 
     public List<CampanhaDTO> montarObjetoRetornoListaCampanhas(List<Campanha> listaDeCampanhas) {
         List<CampanhaDTO> listaResposta = new ArrayList<CampanhaDTO>();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
         for(Campanha campanha: listaDeCampanhas) {
-            EventoCampanha eventoCriacao = eventoCampanhaService.buscarEventoCriacaoCampanha(campanha);
             CampanhaDTO dto = new CampanhaDTO();
-            dto.setImagemCampanha(campanha.getImagemCampanha());
-            dto.setDescricaoCampanha(campanha.getDescricaoCampanha());
-            dto.setSqCampanha(campanha.getSqCampanha());
-            dto.setUsuario(campanha.getUsuario());
-            dto.setTituloCampanha(campanha.getTituloCampanha());
-            dto.setDataCriacao(sdf.format(eventoCriacao.getDataEvento()));
+            dto = converteEmDTO(campanha);
 
             listaResposta.add(dto);
         }
@@ -123,6 +116,21 @@ public class CampanhaService {
         Campanha campanha = campanhaRepository.findById(sqCampanha).get();
 
         return personagemRepository.findAllByCampanha(campanha);
+    }
+
+    public CampanhaDTO converteEmDTO(Campanha campanha) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+        EventoCampanha eventoCriacao = eventoCampanhaService.buscarEventoCriacaoCampanha(campanha);
+        CampanhaDTO dto = new CampanhaDTO();
+        dto.setImagemCampanha(campanha.getImagemCampanha());
+        dto.setDescricaoCampanha(campanha.getDescricaoCampanha());
+        dto.setSqCampanha(campanha.getSqCampanha());
+        dto.setUsuario(campanha.getUsuario());
+        dto.setTituloCampanha(campanha.getTituloCampanha());
+        dto.setDataCriacao(sdf.format(eventoCriacao.getDataEvento()));
+
+        return dto;
     }
 
 
