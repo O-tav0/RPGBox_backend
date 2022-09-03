@@ -98,10 +98,10 @@ public class CampanhaService {
                 aventureiros.add(personagemService.converteEmDTO(personagem));
             }
             else if(personagem.isNpc()) {
-                inimigos.add(personagemService.converteEmDTO(personagem));
+                npcs.add(personagemService.converteEmDTO(personagem));
             }
             else if(personagem.isInimigo()) {
-                npcs.add(personagemService.converteEmDTO(personagem));
+                inimigos.add(personagemService.converteEmDTO(personagem));
             }
         }
 
