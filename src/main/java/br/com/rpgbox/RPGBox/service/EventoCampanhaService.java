@@ -1,11 +1,8 @@
 package br.com.rpgbox.RPGBox.service;
 
 import br.com.rpgbox.RPGBox.DTO.EventoCampanhaDTO;
-import br.com.rpgbox.RPGBox.entity.Personagem;
+import br.com.rpgbox.RPGBox.entity.*;
 import br.com.rpgbox.RPGBox.enums.EnumTipoEventoCampanha;
-import br.com.rpgbox.RPGBox.entity.Campanha;
-import br.com.rpgbox.RPGBox.entity.EventoCampanha;
-import br.com.rpgbox.RPGBox.entity.TipoEventoCampanha;
 import br.com.rpgbox.RPGBox.repository.EventoCampanhaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -108,5 +105,21 @@ public class EventoCampanhaService {
         return dto;
     }
 
+    public void gerarEventoCriacaoAnotacao(Campanha campanha, Anotacao anotacao) {
+        EventoCampanha eventoCriacaoAnotacao = preencherObjetoEventoCriacaoAnotacao(campanha, anotacao);
+        eventoCampanhaRepository.save(eventoCriacaoAnotacao);
+    }
+
+    private EventoCampanha preencherObjetoEventoCriacaoAnotacao(Campanha campanha, Anotacao anotacao) {
+        EventoCampanha evento = new EventoCampanha();
+        TipoEventoCampanha tipoEvento = tipoEventoCampanhaService.buscarTipoEventoCampanha(EnumTipoEventoCampanha.TipoEventoCampanhaEnum.ADICAO_ANOTACAO);
+
+        evento.setCampanha(campanha);
+        evento.setAnotacao(anotacao);
+        evento.setDataEvento(new Date());
+        evento.setTipoEventoCampanha(tipoEvento);
+
+        return evento;
+    }
 
 }
