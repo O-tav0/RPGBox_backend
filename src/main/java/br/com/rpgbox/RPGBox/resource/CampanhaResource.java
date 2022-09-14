@@ -1,5 +1,6 @@
 package br.com.rpgbox.RPGBox.resource;
 
+import br.com.rpgbox.RPGBox.DTO.AnotacaoDTO;
 import br.com.rpgbox.RPGBox.DTO.CampanhaDTO;
 import br.com.rpgbox.RPGBox.DTO.PersonagemDTO;
 import br.com.rpgbox.RPGBox.DTO.PersonagensCampanhaDTO;
@@ -7,6 +8,7 @@ import br.com.rpgbox.RPGBox.VO.CampanhaVO;
 import br.com.rpgbox.RPGBox.VO.RespostaVO;
 import br.com.rpgbox.RPGBox.entity.Campanha;
 import br.com.rpgbox.RPGBox.entity.Personagem;
+import br.com.rpgbox.RPGBox.service.AnotacaoService;
 import br.com.rpgbox.RPGBox.service.CampanhaService;
 import br.com.rpgbox.RPGBox.service.PersonagemService;
 import io.swagger.annotations.ApiOperation;
@@ -30,6 +32,9 @@ public class CampanhaResource {
 
     @Autowired
     private PersonagemService personagemService;
+
+    @Autowired
+    private AnotacaoService anotacaoService;
 
     private RespostaVO respostaRequisicao;
 
@@ -133,6 +138,28 @@ public class CampanhaResource {
             Campanha campanha = campanhaService.buscarCampanhaPorId(sqCampanha);
             retorno = campanhaService.converteEmDTO(campanha);
             respostaRequisicao.setObjetoResposta(retorno);
+            return ResponseEntity.ok(respostaRequisicao);
+
+        }catch(Exception e) {
+            e.printStackTrace();
+            respostaRequisicao.setMensagem(e.getMessage());
+            return ResponseEntity.badRequest().body(respostaRequisicao);
+        }
+    }
+
+    @GetMapping(path="/anotacoes/{sqCampanha}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "novo", notes = "Busca todas as anotações de uma campanha")
+    @ApiResponses(value = { @ApiResponse(code = 500, message = "Erro interno"),
+            @ApiResponse(code = 200, message = "Requisição concluída com sucesso"),
+            @ApiResponse(code = 400, message = "Problema no processamento")})
+    public ResponseEntity<RespostaVO> recuperaAnotacoesPorSqCampanha(@PathVariable Long sqCampanha) {
+
+        respostaRequisicao = new RespostaVO();
+
+
+        try {
+            List<AnotacaoDTO> listaDeAnotacoes = anotacaoService.buscarAnotacoesPorCampanha(sqCampanha);
+            respostaRequisicao.setObjetoResposta(listaDeAnotacoes);
             return ResponseEntity.ok(respostaRequisicao);
 
         }catch(Exception e) {
