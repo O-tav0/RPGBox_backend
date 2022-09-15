@@ -36,6 +36,13 @@ public class Combate {
     @OneToOne
     private StatusCombate statusCombate;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sqCombate")
+    @Column(name="ds_titulo_combate")
+    private String tituloCombate;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "combate")
     private List<PersonagemCombate> personagensDoCombate;
+
+    public Combate(Campanha campanha) {
+        this.campanha = campanha;
+    }
 }

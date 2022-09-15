@@ -122,4 +122,21 @@ public class EventoCampanhaService {
         return evento;
     }
 
+    public void gerarEventoCriacaoCombate(Campanha campanha, Combate combate) {
+        EventoCampanha eventoCriacaoAnotacao = preencherObjetoEventoCriacaoCombate(campanha, combate);
+        eventoCampanhaRepository.save(eventoCriacaoAnotacao);
+    }
+
+    private EventoCampanha preencherObjetoEventoCriacaoCombate(Campanha campanha, Combate combate) {
+        EventoCampanha evento = new EventoCampanha();
+        TipoEventoCampanha tipoEvento = tipoEventoCampanhaService.buscarTipoEventoCampanha(EnumTipoEventoCampanha.TipoEventoCampanhaEnum.ADICAO_COMBATE);
+
+        evento.setCampanha(campanha);
+        evento.setCombate(combate);
+        evento.setDataEvento(new Date());
+        evento.setTipoEventoCampanha(tipoEvento);
+
+        return evento;
+    }
+
 }
