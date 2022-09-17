@@ -27,6 +27,9 @@ public class EventoCampanhaService {
     @Autowired
     private PersonagemService personagemService;
 
+    @Autowired
+    private AnotacaoService anotacaoService;
+
     public void gerarEventoCriacaoCampanha(Campanha campanha) {
         EventoCampanha eventoCriacaoCampanha = preencherObjetoEventoCriacaoCampanha(campanha);
         eventoCampanhaRepository.save(eventoCriacaoCampanha);
@@ -95,10 +98,10 @@ public class EventoCampanhaService {
         if(evento.isEventoPersonagem()) {
             dto.setPersonagem(personagemService.converteEmDTO(evento.getPersonagem()));
         }
-        else if(evento.isEventoCombate()) {
-            dto.setAnotacao(evento.getAnotacao());
+        else if(evento.isEventoAnotacao()) {
+            dto.setAnotacao(anotacaoService.converteEmDTO(evento.getAnotacao()));
         }
-        else if(evento.isEventoAnotacao()){
+        else if(evento.isEventoCombate()){
             dto.setCombate(evento.getCombate());
         }
 

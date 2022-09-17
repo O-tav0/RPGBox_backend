@@ -30,7 +30,7 @@ public class AnotacaoService {
 
         anotacao = anotacaoRepository.save(anotacao);
 
-        salvarEventoCriacaoCampanha(campanha, anotacao);
+        salvarEventoCriacaoAnotacao(campanha, anotacao);
     }
 
     public Anotacao preencherNovaAnotacao(Campanha campanha, AnotacaoVO novaAnotacao) {
@@ -42,7 +42,7 @@ public class AnotacaoService {
         return anotacao;
     }
 
-    public void salvarEventoCriacaoCampanha(Campanha campanha, Anotacao anotacao) {
+    public void salvarEventoCriacaoAnotacao(Campanha campanha, Anotacao anotacao) {
         eventoCampanhaService.gerarEventoCriacaoAnotacao(campanha, anotacao);
     }
 
