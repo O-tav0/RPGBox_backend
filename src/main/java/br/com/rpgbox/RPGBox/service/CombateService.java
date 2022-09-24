@@ -1,5 +1,8 @@
 package br.com.rpgbox.RPGBox.service;
 
+import br.com.rpgbox.RPGBox.DTO.CombateDTO;
+import br.com.rpgbox.RPGBox.DTO.PersonagemCombateDTO;
+import br.com.rpgbox.RPGBox.DTO.PersonagemDTO;
 import br.com.rpgbox.RPGBox.VO.CombateVO;
 import br.com.rpgbox.RPGBox.VO.PersonagemCombateVO;
 import br.com.rpgbox.RPGBox.entity.*;
@@ -9,9 +12,11 @@ import br.com.rpgbox.RPGBox.repository.PersonagemCombateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class CombateService {
@@ -33,6 +38,9 @@ public class CombateService {
 
     @Autowired
     private EventoCampanhaService eventoCampanhaService;
+
+    @Autowired
+    private TipoPersonagemService tipoPersonagemService;
 
     public void criarNovoCombate(CombateVO novoCombate) {
 
@@ -83,5 +91,46 @@ public class CombateService {
 
     public void salvarEventoCriacaoCombate(Campanha campanha, Combate combate) {
         eventoCampanhaService.gerarEventoCriacaoCombate(campanha, combate);
+    }
+
+    public List<CombateDTO> buscarCombatesDaCampanha(Long sqCampanha) {
+        Campanha campanha = campanhaService.buscarCampanhaPorId(sqCampanha);
+        List<CombateDTO> lista = new ArrayList<CombateDTO>();
+        if(Objects.nonNull(campanha)) {
+            List<Combate> combates = combateRepository.findAllByCampanha(campanha);
+            for(Combate combate: combates) {
+                lista.add(converteEmDTO(combate));
+            }
+            return lista;
+        } else {
+            throw new EntityNotFoundException();
+        }
+    }
+
+    public CombateDTO converteEmDTO(Combate combate) {
+        CombateDTO dto = new CombateDTO();
+
+        dto.setDtCombate(combate.getDtCombate());
+        dto.setStatusCombate(combate.getStatusCombate());
+        dto.setTituloCombate(combate.getTituloCombate());
+        dto.setSqCombate(combate.getSqCombate());
+        dto.setPersonagensDoCombate(retornaPersonagensCombateDTO(combate.getPersonagensDoCombate()));
+
+        return dto;
+    }
+
+    public List<PersonagemCombateDTO> retornaPersonagensCombateDTO(List<PersonagemCombate> personagens) {
+        List<PersonagemCombateDTO> listaRetorno = new ArrayList<PersonagemCombateDTO>();
+
+        for(PersonagemCombate persComb: personagens) {
+              PersonagemCombateDTO dto = new PersonagemCombateDTO();
+
+              dto.setPersonagem(personagemService.converteEmDTO(persComb.getPersonagem()));
+              dto.setNrOrdemCombate(persComb.getNrOrdemCombate());
+
+              listaRetorno.add(dto);
+        }
+
+        return listaRetorno;
     }
 }

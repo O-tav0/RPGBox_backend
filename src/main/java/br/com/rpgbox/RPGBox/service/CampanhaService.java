@@ -4,10 +4,7 @@ import br.com.rpgbox.RPGBox.DTO.CampanhaDTO;
 import br.com.rpgbox.RPGBox.DTO.PersonagemDTO;
 import br.com.rpgbox.RPGBox.DTO.PersonagensCampanhaDTO;
 import br.com.rpgbox.RPGBox.VO.CampanhaVO;
-import br.com.rpgbox.RPGBox.entity.Campanha;
-import br.com.rpgbox.RPGBox.entity.EventoCampanha;
-import br.com.rpgbox.RPGBox.entity.Personagem;
-import br.com.rpgbox.RPGBox.entity.Usuario;
+import br.com.rpgbox.RPGBox.entity.*;
 import br.com.rpgbox.RPGBox.repository.CampanhaRepository;
 import br.com.rpgbox.RPGBox.repository.PersonagemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +32,9 @@ public class CampanhaService {
 
     @Autowired
     private PersonagemService personagemService;
+
+    @Autowired
+    private CombateService combateService;
 
     public void criarNovaCampanha(CampanhaVO campanhaVO) {
 
