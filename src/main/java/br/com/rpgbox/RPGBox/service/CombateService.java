@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -108,10 +109,11 @@ public class CombateService {
     }
 
     public CombateDTO converteEmDTO(Combate combate) {
+        SimpleDateFormat  sdf = new SimpleDateFormat("dd/MM/yyyy");
         CombateDTO dto = new CombateDTO();
 
-        dto.setDtCombate(combate.getDtCombate());
-        dto.setStatusCombate(combate.getStatusCombate());
+        dto.setDtCombate(sdf.format(combate.getDtCombate()));
+        dto.setStatusCombate(combate.getStatusCombate().getDsStatusCombate());
         dto.setTituloCombate(combate.getTituloCombate());
         dto.setSqCombate(combate.getSqCombate());
         dto.setPersonagensDoCombate(retornaPersonagensCombateDTO(combate.getPersonagensDoCombate()));

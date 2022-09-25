@@ -17,8 +17,8 @@ import java.util.List;
 public class CombateDTO {
 
     private Long sqCombate;
-    private Date dtCombate;
-    private StatusCombate statusCombate;
+    private String dtCombate;
+    private String statusCombate;
     private String tituloCombate;
     private List<PersonagemCombateDTO> personagensDoCombate;
 }
