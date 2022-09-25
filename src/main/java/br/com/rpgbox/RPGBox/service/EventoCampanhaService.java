@@ -30,6 +30,9 @@ public class EventoCampanhaService {
     @Autowired
     private AnotacaoService anotacaoService;
 
+    @Autowired
+    private CombateService combateService;
+
     public void gerarEventoCriacaoCampanha(Campanha campanha) {
         EventoCampanha eventoCriacaoCampanha = preencherObjetoEventoCriacaoCampanha(campanha);
         eventoCampanhaRepository.save(eventoCriacaoCampanha);
@@ -102,7 +105,7 @@ public class EventoCampanhaService {
             dto.setAnotacao(anotacaoService.converteEmDTO(evento.getAnotacao()));
         }
         else if(evento.isEventoCombate()){
-            dto.setCombate(evento.getCombate());
+            dto.setCombate(combateService.converteEmDTO(evento.getCombate()));
         }
 
         return dto;

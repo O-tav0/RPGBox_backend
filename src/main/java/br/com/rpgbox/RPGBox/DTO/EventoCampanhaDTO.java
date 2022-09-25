@@ -15,7 +15,7 @@ public class EventoCampanhaDTO {
     private String descricaoEventoCampanha;
     private String dataEvento;
     private PersonagemDTO personagem;
-    private Combate combate;
+    private CombateDTO combate;
     private AnotacaoDTO anotacao;
 
 }
