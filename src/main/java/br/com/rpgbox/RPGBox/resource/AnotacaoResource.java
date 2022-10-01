@@ -13,6 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
+
 
 @RestController()
 @RequestMapping("/anotacao")
@@ -54,6 +56,9 @@ public class AnotacaoResource {
             AnotacaoDTO dto = anotacaoService.buscarAnotacao(sqAnotacao);
             respostaRequisicao.setObjetoResposta(dto);
             return ResponseEntity.ok(respostaRequisicao);
+        } catch(EntityNotFoundException ent) {
+            respostaRequisicao.setMensagem("Anotação não encontrada!");
+            return ResponseEntity.badRequest().body(respostaRequisicao);
         } catch (Exception e) {
             respostaRequisicao.setMensagem("Houve um problema ao buscar a anotação.");
             return ResponseEntity.badRequest().body(respostaRequisicao);

@@ -12,5 +12,5 @@ import lombok.Setter;
 public class AnotacaoDTO {
     private String descricaoAnotacao;
     private Long sqAnotacao;
-
+    private String dataAnotacao;
 }

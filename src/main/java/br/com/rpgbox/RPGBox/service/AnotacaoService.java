@@ -4,12 +4,16 @@ import br.com.rpgbox.RPGBox.DTO.AnotacaoDTO;
 import br.com.rpgbox.RPGBox.VO.AnotacaoVO;
 import br.com.rpgbox.RPGBox.entity.Anotacao;
 import br.com.rpgbox.RPGBox.entity.Campanha;
+import br.com.rpgbox.RPGBox.entity.EventoCampanha;
 import br.com.rpgbox.RPGBox.repository.AnotacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class AnotacaoService {
@@ -48,6 +52,7 @@ public class AnotacaoService {
 
     public List<AnotacaoDTO> buscarAnotacoesPorCampanha(Long sqCampanha) {
         Campanha campanha = campanhaService.buscarCampanhaPorId(sqCampanha);
+
         List<AnotacaoDTO> listaRetorno = new ArrayList<AnotacaoDTO>();
         List<Anotacao> anotacoesDaCampanha = anotacaoRepository.findAllByCampanha(campanha);
 
@@ -58,17 +63,26 @@ public class AnotacaoService {
         return listaRetorno;
     }
 
-    public AnotacaoDTO buscarAnotacao(Long sqCampanha) {
-        Anotacao anotacao = anotacaoRepository.findById(sqCampanha).get();
+    public AnotacaoDTO buscarAnotacao(Long sqAnotacao) throws EntityNotFoundException{
+        Anotacao anotacao = anotacaoRepository.findById(sqAnotacao).get();
+        if(Objects.nonNull(anotacao)) {
+            return converteEmDTO(anotacao);
+        } else {
+            throw new EntityNotFoundException();
+        }
 
-        return converteEmDTO(anotacao);
+
+
     }
 
     public AnotacaoDTO converteEmDTO(Anotacao anotacao) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        EventoCampanha evento = eventoCampanhaService.buscarEventoAnotacao(anotacao);
         AnotacaoDTO dto = new AnotacaoDTO();
 
         dto.setSqAnotacao(anotacao.getSqAnotacao());
         dto.setDescricaoAnotacao(anotacao.getDsAnotacao());
+        dto.setDataAnotacao(sdf.format(evento.getDataEvento()));
 
         return dto;
     }

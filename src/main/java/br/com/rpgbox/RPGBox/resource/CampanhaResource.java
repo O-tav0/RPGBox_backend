@@ -158,7 +158,6 @@ public class CampanhaResource {
 
         respostaRequisicao = new RespostaVO();
 
-
         try {
             List<AnotacaoDTO> listaDeAnotacoes = anotacaoService.buscarAnotacoesPorCampanha(sqCampanha);
             respostaRequisicao.setObjetoResposta(listaDeAnotacoes);

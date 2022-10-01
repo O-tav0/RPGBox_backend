@@ -145,4 +145,8 @@ public class EventoCampanhaService {
         return evento;
     }
 
+    public EventoCampanha buscarEventoAnotacao(Anotacao anotacao) {
+        return eventoCampanhaRepository.findByAnotacao(anotacao);
+    }
+
 }
