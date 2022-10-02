@@ -135,4 +135,14 @@ public class CombateService {
 
         return listaRetorno;
     }
+
+    public CombateDTO buscarCombate(Long sqCombate) throws EntityNotFoundException{
+        Combate combate = combateRepository.findById(sqCombate).get();
+
+        if(Objects.nonNull(combate)) {
+            return converteEmDTO(combate);
+        } else {
+            throw new EntityNotFoundException();
+        }
+    }
 }
