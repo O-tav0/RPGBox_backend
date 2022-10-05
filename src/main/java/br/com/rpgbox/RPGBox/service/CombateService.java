@@ -14,10 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class CombateService {
@@ -123,6 +120,13 @@ public class CombateService {
 
     public List<PersonagemCombateDTO> retornaPersonagensCombateDTO(List<PersonagemCombate> personagens) {
         List<PersonagemCombateDTO> listaRetorno = new ArrayList<PersonagemCombateDTO>();
+
+        Collections.sort(personagens, new Comparator<PersonagemCombate>() {
+            @Override
+            public int compare(PersonagemCombate u1, PersonagemCombate u2) {
+                return u1.getNrOrdemCombate().compareTo(u2.getNrOrdemCombate());
+            }
+        });
 
         for(PersonagemCombate persComb: personagens) {
               PersonagemCombateDTO dto = new PersonagemCombateDTO();
