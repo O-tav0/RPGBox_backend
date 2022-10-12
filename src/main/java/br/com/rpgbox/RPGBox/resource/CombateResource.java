@@ -1,8 +1,10 @@
 package br.com.rpgbox.RPGBox.resource;
 
 import br.com.rpgbox.RPGBox.DTO.CombateDTO;
+import br.com.rpgbox.RPGBox.VO.CombateLog;
 import br.com.rpgbox.RPGBox.VO.CombateVO;
 import br.com.rpgbox.RPGBox.VO.RespostaVO;
+import br.com.rpgbox.RPGBox.VO.ResumoCombateVO;
 import br.com.rpgbox.RPGBox.service.CombateService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -14,7 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 
-@RestController()
+@CrossOrigin(origins = "*")
+@RestController
 @RequestMapping("/combates")
 public class CombateResource {
 
@@ -59,6 +62,27 @@ public class CombateResource {
             etf.printStackTrace();
             respostaRequisicao.setMensagem("Combate não encontrado!");
             return ResponseEntity.badRequest().body(respostaRequisicao);
+        } catch(Exception e) {
+            e.printStackTrace();
+            respostaRequisicao.setMensagem(e.getMessage());
+            return ResponseEntity.badRequest().body(respostaRequisicao);
+        }
+    }
+
+    @PutMapping(path="/{sqCombate}/finalizar", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "novo", notes = "Finaliza e atualiza o status de um combate na campanha")
+    @ApiResponses(value = { @ApiResponse(code = 500, message = "Erro interno"),
+            @ApiResponse(code = 200, message = "Requisição concluída com sucesso"),
+            @ApiResponse(code = 400, message = "Problema no processamento")})
+    public ResponseEntity<RespostaVO> finalizarCombate(@PathVariable Long sqCombate, @RequestBody CombateLog resumoCombate) {
+
+        RespostaVO respostaRequisicao = new RespostaVO();
+
+        try {
+            combateService.finalizarCombate(sqCombate, resumoCombate);
+            respostaRequisicao.setMensagem("Combate finalizado com sucesso!");
+            return ResponseEntity.ok(respostaRequisicao);
+
         } catch(Exception e) {
             e.printStackTrace();
             respostaRequisicao.setMensagem(e.getMessage());

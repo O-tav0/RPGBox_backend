@@ -24,7 +24,6 @@ public class Combate {
     @Column(name="DT_COMBATE")
     private Date dtCombate;
 
-    @Lob
     @Column(name="DS_RESUMO_COMBATE")
     private String resumoCombate;
 

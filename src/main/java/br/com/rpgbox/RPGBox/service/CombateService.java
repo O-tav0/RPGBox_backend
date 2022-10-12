@@ -3,12 +3,15 @@ package br.com.rpgbox.RPGBox.service;
 import br.com.rpgbox.RPGBox.DTO.CombateDTO;
 import br.com.rpgbox.RPGBox.DTO.PersonagemCombateDTO;
 import br.com.rpgbox.RPGBox.DTO.PersonagemDTO;
+import br.com.rpgbox.RPGBox.VO.CombateLog;
 import br.com.rpgbox.RPGBox.VO.CombateVO;
 import br.com.rpgbox.RPGBox.VO.PersonagemCombateVO;
+import br.com.rpgbox.RPGBox.VO.Turno;
 import br.com.rpgbox.RPGBox.entity.*;
 import br.com.rpgbox.RPGBox.enums.EnumStatusCombate;
 import br.com.rpgbox.RPGBox.repository.CombateRepository;
 import br.com.rpgbox.RPGBox.repository.PersonagemCombateRepository;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -96,6 +99,12 @@ public class CombateService {
         List<CombateDTO> lista = new ArrayList<CombateDTO>();
         if(Objects.nonNull(campanha)) {
             List<Combate> combates = combateRepository.findAllByCampanha(campanha);
+            Collections.sort(combates, new Comparator<Combate>() {
+                @Override
+                public int compare(Combate u1, Combate u2) {
+                    return u1.getSqCombate().compareTo(u2.getSqCombate());
+                }
+            });
             for(Combate combate: combates) {
                 lista.add(converteEmDTO(combate));
             }
@@ -148,5 +157,16 @@ public class CombateService {
         } else {
             throw new EntityNotFoundException();
         }
+    }
+
+    public void finalizarCombate(Long sqCombate, CombateLog resumoCombate) {
+        Combate combate = combateRepository.findById(sqCombate).get();
+        StatusCombate status = statusCombateService.buscarStatusCombate(EnumStatusCombate.StatusCombateEnum.FINALIZADO);
+
+        JSONObject obj = new JSONObject(resumoCombate);
+
+        combate.setResumoCombate(obj.toString());
+        combate.setStatusCombate(status);
+        combateRepository.save(combate);
     }
 }
