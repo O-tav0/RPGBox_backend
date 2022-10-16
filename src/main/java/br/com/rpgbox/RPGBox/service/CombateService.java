@@ -1,16 +1,15 @@
 package br.com.rpgbox.RPGBox.service;
 
 import br.com.rpgbox.RPGBox.DTO.CombateDTO;
+import br.com.rpgbox.RPGBox.DTO.HabilidadeDTO;
 import br.com.rpgbox.RPGBox.DTO.PersonagemCombateDTO;
 import br.com.rpgbox.RPGBox.DTO.PersonagemDTO;
-import br.com.rpgbox.RPGBox.VO.CombateLog;
-import br.com.rpgbox.RPGBox.VO.CombateVO;
-import br.com.rpgbox.RPGBox.VO.PersonagemCombateVO;
-import br.com.rpgbox.RPGBox.VO.Turno;
+import br.com.rpgbox.RPGBox.VO.*;
 import br.com.rpgbox.RPGBox.entity.*;
 import br.com.rpgbox.RPGBox.enums.EnumStatusCombate;
 import br.com.rpgbox.RPGBox.repository.CombateRepository;
 import br.com.rpgbox.RPGBox.repository.PersonagemCombateRepository;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -117,12 +116,74 @@ public class CombateService {
     public CombateDTO converteEmDTO(Combate combate) {
         SimpleDateFormat  sdf = new SimpleDateFormat("dd/MM/yyyy");
         CombateDTO dto = new CombateDTO();
+        CombateLog log = new CombateLog();
+        List<Turno> turnosCombate = new ArrayList<Turno>();
 
+
+        if(Objects.nonNull(combate.getResumoCombate())) {
+            JSONObject obj = new JSONObject(combate.getResumoCombate());
+            JSONArray array = obj.getJSONArray("resumoCombate");
+
+            for(int i = 0; i < array.length(); i++) {
+                Turno turnoLog = new Turno();
+                List<Acao> acoesDoTurno = new ArrayList<Acao>();
+                JSONObject turno = array.getJSONObject(i);
+
+                turnoLog.setNumeroTurno(turno.getInt("numeroTurno"));
+
+                JSONArray acoes = turno.getJSONArray("acoesDoTurno");
+
+                for(int j=0; j < acoes.length(); j++) {
+                    JSONObject objAcao = acoes.getJSONObject(j);
+
+                    Acao acaoRetorno = new Acao();
+
+                    acaoRetorno.setDanoCausado(objAcao.getInt("danoCausado"));
+
+                    JSONObject habilidade = objAcao.getJSONObject("habilidadeUtilizada");
+                    HabilidadeDTO habDTO = new HabilidadeDTO();
+                    habDTO.setDescricaoHabilidade(habilidade.getString("nomeHabilidade"));
+                    habDTO.setTipoHabilidade(habilidade.getString("tipoHabilidade"));
+                    habDTO.setDescricaoHabilidade(habilidade.getString("descricaoHabilidade"));
+                    acaoRetorno.setHabilidadeUtilizada(habDTO);
+
+                    JSONObject queUtilizou = objAcao.getJSONObject("personagemQueUtilizou");
+                    PersonagemLog personagemQueUtilizou = new PersonagemLog();
+                    personagemQueUtilizou.setClassePersonagem(queUtilizou.getString("classePersonagem"));
+                    personagemQueUtilizou.setNivelPersonagem(queUtilizou.getInt("nivelPersonagem"));
+                    personagemQueUtilizou.setNomePersonagem(queUtilizou.getString("nomePersonagem"));
+                    personagemQueUtilizou.setSqPersonagem(queUtilizou.getLong("sqPersonagem"));
+                    personagemQueUtilizou.setTipoPersonagem(queUtilizou.getString("tipoPersonagem"));
+                    personagemQueUtilizou.setRacaPersonagem(queUtilizou.getString("racaPersonagem"));
+
+                    JSONObject alvo = objAcao.getJSONObject("personagemAlvo");
+                    PersonagemLog personagemAlvo = new PersonagemLog();
+                    personagemAlvo.setClassePersonagem(alvo.getString("classePersonagem"));
+                    personagemAlvo.setNivelPersonagem(alvo.getInt("nivelPersonagem"));
+                    personagemAlvo.setNomePersonagem(alvo.getString("nomePersonagem"));
+                    personagemAlvo.setSqPersonagem(alvo.getLong("sqPersonagem"));
+                    personagemAlvo.setTipoPersonagem(alvo.getString("tipoPersonagem"));
+                    personagemAlvo.setRacaPersonagem(alvo.getString("racaPersonagem"));
+
+                    acaoRetorno.setPersonagemAlvo(personagemAlvo);
+                    acaoRetorno.setPersonagemQueUtilizou(personagemQueUtilizou);
+
+                    acoesDoTurno.add(acaoRetorno);
+                    turnoLog.setAcoesDoTurno(acoesDoTurno);
+
+                }
+                turnosCombate.add(turnoLog);
+            }
+            
+        }
+
+        log.setResumoCombate(turnosCombate);
         dto.setDtCombate(sdf.format(combate.getDtCombate()));
         dto.setStatusCombate(combate.getStatusCombate().getDsStatusCombate());
         dto.setTituloCombate(combate.getTituloCombate());
         dto.setSqCombate(combate.getSqCombate());
         dto.setPersonagensDoCombate(retornaPersonagensCombateDTO(combate.getPersonagensDoCombate()));
+        dto.setResumoCombate(log);
 
         return dto;
     }

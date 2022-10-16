@@ -1,5 +1,6 @@
 package br.com.rpgbox.RPGBox.DTO;
 
+import br.com.rpgbox.RPGBox.VO.CombateLog;
 import br.com.rpgbox.RPGBox.entity.StatusCombate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,4 +22,5 @@ public class CombateDTO {
     private String statusCombate;
     private String tituloCombate;
     private List<PersonagemCombateDTO> personagensDoCombate;
+    private CombateLog resumoCombate;
 }
