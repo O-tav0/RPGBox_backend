@@ -142,7 +142,7 @@ public class CombateService {
 
                     JSONObject habilidade = objAcao.getJSONObject("habilidadeUtilizada");
                     HabilidadeDTO habDTO = new HabilidadeDTO();
-                    habDTO.setDescricaoHabilidade(habilidade.getString("nomeHabilidade"));
+                    habDTO.setNomeHabilidade(habilidade.getString("nomeHabilidade"));
                     habDTO.setTipoHabilidade(habilidade.getString("tipoHabilidade"));
                     habDTO.setDescricaoHabilidade(habilidade.getString("descricaoHabilidade"));
                     acaoRetorno.setHabilidadeUtilizada(habDTO);
@@ -174,7 +174,7 @@ public class CombateService {
                 }
                 turnosCombate.add(turnoLog);
             }
-            
+
         }
 
         log.setResumoCombate(turnosCombate);
