@@ -5,6 +5,7 @@ import br.com.rpgbox.RPGBox.DTO.PersonagemDTO;
 import br.com.rpgbox.RPGBox.DTO.PersonagensCampanhaDTO;
 import br.com.rpgbox.RPGBox.VO.CampanhaVO;
 import br.com.rpgbox.RPGBox.entity.*;
+import br.com.rpgbox.RPGBox.enums.SituacaoDeletadoEnum;
 import br.com.rpgbox.RPGBox.repository.CampanhaRepository;
 import br.com.rpgbox.RPGBox.repository.PersonagemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import javax.persistence.EntityNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class CampanhaService {
@@ -63,7 +65,7 @@ public class CampanhaService {
 
     public List<CampanhaDTO> buscarCampanhasDoUsuario(String email) {
         Usuario usuario = usuarioService.buscarUsuarioPorEmail(email).orElseThrow(EntityNotFoundException::new);
-        List<Campanha> campanhas = campanhaRepository.findByUsuario(usuario);
+        List<Campanha> campanhas = campanhaRepository.findByUsuarioAndStDeletado(usuario, null);
 
         return montarObjetoRetornoListaCampanhas(campanhas);
     }
@@ -115,7 +117,7 @@ public class CampanhaService {
     public List<Personagem> buscarPersonagensDaCampanha(Long sqCampanha) {
         Campanha campanha = campanhaRepository.findById(sqCampanha).get();
 
-        return personagemRepository.findAllByCampanha(campanha);
+        return personagemRepository.findAllByCampanhaAndStDeletado(campanha, null);
     }
 
     public CampanhaDTO converteEmDTO(Campanha campanha) {
@@ -133,7 +135,17 @@ public class CampanhaService {
         return dto;
     }
 
+    public void deletarCampanha(Long sqCampanha) throws EntityNotFoundException {
+        Campanha campanha = campanhaRepository.findById(sqCampanha).get();
+        SituacaoDeletadoEnum situacao = new SituacaoDeletadoEnum(SituacaoDeletadoEnum.SituacaoEnum.SIM);
 
+        if(Objects.nonNull(campanha)) {
+            campanha.setStDeletado(situacao.getSituacao());
+            campanhaRepository.save(campanha);
+        } else {
+            throw new EntityNotFoundException();
+        }
+    }
 
 
 }

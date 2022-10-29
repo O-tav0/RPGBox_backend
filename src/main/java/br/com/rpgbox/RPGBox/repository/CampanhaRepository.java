@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface CampanhaRepository extends CrudRepository<Campanha, Long> {
 
-    public List<Campanha> findByUsuario(Usuario usuario);
+    public List<Campanha> findByUsuarioAndStDeletado(Usuario usuario, String stDeletado);
 }

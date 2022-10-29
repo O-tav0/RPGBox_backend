@@ -13,6 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
+
 @RestController()
 @RequestMapping("/personagem")
 public class PersonagemResource {
@@ -58,6 +60,31 @@ public class PersonagemResource {
         }catch(Exception e) {
             e.printStackTrace();
             respostaRequisicao.setMensagem(e.getMessage());
+            return ResponseEntity.badRequest().body(respostaRequisicao);
+        }
+    }
+
+    @DeleteMapping(path="/{sqPersonagem}/deletar", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "novo", notes = "Realiza uma exclusão lógica de um registro de personagem através do campo ST_DELETADO")
+    @ApiResponses(value = { @ApiResponse(code = 500, message = "Erro interno"),
+            @ApiResponse(code = 200, message = "Registro deletado"),
+            @ApiResponse(code = 400, message = "Problema no processamento")})
+    public ResponseEntity<RespostaVO> deletarAnotacao(@PathVariable Long sqPersonagem) {
+
+        RespostaVO respostaRequisicao = new RespostaVO();
+
+        try {
+            personagemService.deletarPersonagem(sqPersonagem);
+            respostaRequisicao.setMensagem("Personagem deletado com sucesso!");
+            return ResponseEntity.ok(respostaRequisicao);
+
+        }catch(EntityNotFoundException e) {
+            e.printStackTrace();
+            respostaRequisicao.setMensagem("Anotacao não encontrada com o sqPersonagem: " + sqPersonagem);
+            return ResponseEntity.badRequest().body(respostaRequisicao);
+        }catch (Exception e) {
+            e.printStackTrace();
+            respostaRequisicao.setMensagem("Houve um problema ao processar a requisição.");
             return ResponseEntity.badRequest().body(respostaRequisicao);
         }
     }

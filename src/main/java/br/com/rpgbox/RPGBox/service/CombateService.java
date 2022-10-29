@@ -7,6 +7,7 @@ import br.com.rpgbox.RPGBox.DTO.PersonagemDTO;
 import br.com.rpgbox.RPGBox.VO.*;
 import br.com.rpgbox.RPGBox.entity.*;
 import br.com.rpgbox.RPGBox.enums.EnumStatusCombate;
+import br.com.rpgbox.RPGBox.enums.SituacaoDeletadoEnum;
 import br.com.rpgbox.RPGBox.repository.CombateRepository;
 import br.com.rpgbox.RPGBox.repository.PersonagemCombateRepository;
 import org.json.JSONArray;
@@ -97,7 +98,7 @@ public class CombateService {
         Campanha campanha = campanhaService.buscarCampanhaPorId(sqCampanha);
         List<CombateDTO> lista = new ArrayList<CombateDTO>();
         if(Objects.nonNull(campanha)) {
-            List<Combate> combates = combateRepository.findAllByCampanha(campanha);
+            List<Combate> combates = combateRepository.findAllByCampanhaAndStDeletado(campanha, null);
             Collections.sort(combates, new Comparator<Combate>() {
                 @Override
                 public int compare(Combate u1, Combate u2) {
@@ -229,5 +230,17 @@ public class CombateService {
         combate.setResumoCombate(obj.toString());
         combate.setStatusCombate(status);
         combateRepository.save(combate);
+    }
+
+    public void deletarCombate(Long sqCampanha) throws EntityNotFoundException {
+        Combate combate = combateRepository.findById(sqCampanha).get();
+        SituacaoDeletadoEnum situacao = new SituacaoDeletadoEnum(SituacaoDeletadoEnum.SituacaoEnum.SIM);
+
+        if(Objects.nonNull(combate)) {
+            combate.setStDeletado(situacao.getSituacao());
+            combateRepository.save(combate);
+        } else {
+            throw new EntityNotFoundException();
+        }
     }
 }

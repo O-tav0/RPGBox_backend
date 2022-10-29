@@ -38,6 +38,9 @@ public class Combate {
     @Column(name="ds_titulo_combate")
     private String tituloCombate;
 
+    @Column(name="ST_DELETADO")
+    private String stDeletado;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "combate")
     private List<PersonagemCombate> personagensDoCombate;
 

@@ -26,4 +26,7 @@ public class Anotacao {
     @Column(name="DS_ANOTACAO")
     private String dsAnotacao;
 
+    @Column(name="ST_DELETADO")
+    private String stDeletado;
+
 }

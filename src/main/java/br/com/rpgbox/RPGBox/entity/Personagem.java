@@ -47,6 +47,9 @@ public class Personagem {
     @Column(name="NR_NIVEL_PERSONAGEM")
     private Integer nivelPersonagem;
 
+    @Column(name="ST_DELETADO")
+    private String stDeletado;
+
     @OneToMany(mappedBy = "personagem")
     private List<Habilidade> habilidadesPersonagem;
 

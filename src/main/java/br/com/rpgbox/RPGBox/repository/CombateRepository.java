@@ -10,5 +10,5 @@ import java.util.List;
 
 public interface CombateRepository extends CrudRepository<Combate, Long> {
 
-    public List<Combate> findAllByCampanha(Campanha campanha);
+    public List<Combate> findAllByCampanhaAndStDeletado(Campanha campanha, String stDeletado);
 }

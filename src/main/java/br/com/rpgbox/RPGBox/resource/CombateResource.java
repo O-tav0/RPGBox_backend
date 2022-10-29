@@ -90,4 +90,29 @@ public class CombateResource {
         }
     }
 
+    @DeleteMapping(path="/{sqCombate}/deletar", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "novo", notes = "Realiza uma exclusão lógica de um registro de combate através do campo ST_DELETADO")
+    @ApiResponses(value = { @ApiResponse(code = 500, message = "Erro interno"),
+            @ApiResponse(code = 200, message = "Registro deletado"),
+            @ApiResponse(code = 400, message = "Problema no processamento")})
+    public ResponseEntity<RespostaVO> deletarCombate(@PathVariable Long sqCombate) {
+
+        RespostaVO respostaRequisicao = new RespostaVO();
+
+        try {
+            combateService.deletarCombate(sqCombate);
+            respostaRequisicao.setMensagem("Combate deletada com sucesso!");
+            return ResponseEntity.ok(respostaRequisicao);
+
+        }catch(EntityNotFoundException e) {
+            e.printStackTrace();
+            respostaRequisicao.setMensagem("Combate não encontrada com o sqCombate: " + sqCombate);
+            return ResponseEntity.badRequest().body(respostaRequisicao);
+        }catch (Exception e) {
+            e.printStackTrace();
+            respostaRequisicao.setMensagem("Houve um problema ao processar a requisição.");
+            return ResponseEntity.badRequest().body(respostaRequisicao);
+        }
+    }
+
 }

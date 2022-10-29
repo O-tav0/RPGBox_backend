@@ -31,4 +31,7 @@ public class Campanha {
     @JoinColumn(name="SQ_USUARIO")
     @OneToOne
     private Usuario usuario;
+
+    @Column(name="ST_DELETADO")
+    private String stDeletado;
 }

@@ -4,7 +4,9 @@ import br.com.rpgbox.RPGBox.DTO.AnotacaoDTO;
 import br.com.rpgbox.RPGBox.VO.AnotacaoVO;
 import br.com.rpgbox.RPGBox.entity.Anotacao;
 import br.com.rpgbox.RPGBox.entity.Campanha;
+import br.com.rpgbox.RPGBox.entity.Combate;
 import br.com.rpgbox.RPGBox.entity.EventoCampanha;
+import br.com.rpgbox.RPGBox.enums.SituacaoDeletadoEnum;
 import br.com.rpgbox.RPGBox.repository.AnotacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,7 +56,7 @@ public class AnotacaoService {
         Campanha campanha = campanhaService.buscarCampanhaPorId(sqCampanha);
 
         List<AnotacaoDTO> listaRetorno = new ArrayList<AnotacaoDTO>();
-        List<Anotacao> anotacoesDaCampanha = anotacaoRepository.findAllByCampanha(campanha);
+        List<Anotacao> anotacoesDaCampanha = anotacaoRepository.findAllByCampanhaAndStDeletado(campanha, null);
 
         for(Anotacao anotacao: anotacoesDaCampanha) {
             listaRetorno.add(converteEmDTO(anotacao));
@@ -63,16 +65,25 @@ public class AnotacaoService {
         return listaRetorno;
     }
 
-    public AnotacaoDTO buscarAnotacao(Long sqAnotacao) throws EntityNotFoundException{
+    public AnotacaoDTO buscarAnotacao(Long sqAnotacao) throws EntityNotFoundException {
         Anotacao anotacao = anotacaoRepository.findById(sqAnotacao).get();
         if(Objects.nonNull(anotacao)) {
             return converteEmDTO(anotacao);
         } else {
             throw new EntityNotFoundException();
         }
+    }
 
+    public void deletarAnotacao(Long sqAnotacao) throws EntityNotFoundException {
+        Anotacao anotacao = anotacaoRepository.findById(sqAnotacao).get();
+        SituacaoDeletadoEnum situacao = new SituacaoDeletadoEnum(SituacaoDeletadoEnum.SituacaoEnum.SIM);
 
-
+        if(Objects.nonNull(anotacao)) {
+            anotacao.setStDeletado(situacao.getSituacao());
+            anotacaoRepository.save(anotacao);
+        } else {
+            throw new EntityNotFoundException();
+        }
     }
 
     public AnotacaoDTO converteEmDTO(Anotacao anotacao) {

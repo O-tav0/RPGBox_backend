@@ -196,6 +196,32 @@ public class CampanhaResource {
         }
     }
 
+    @DeleteMapping(path="/{sqCampanha}/deletar", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "novo", notes = "Realiza uma exclusão lógica de um registro de campanha através do campo ST_DELETADO")
+    @ApiResponses(value = { @ApiResponse(code = 500, message = "Erro interno"),
+            @ApiResponse(code = 200, message = "Registro deletado"),
+            @ApiResponse(code = 400, message = "Problema no processamento")})
+    public ResponseEntity<RespostaVO> deletarCampanha(@PathVariable Long sqCampanha) {
+
+        respostaRequisicao = new RespostaVO();
+
+        try {
+            campanhaService.deletarCampanha(sqCampanha);
+            respostaRequisicao.setMensagem("Campanha deletada com sucesso!");
+            return ResponseEntity.ok(respostaRequisicao);
+
+        }catch(EntityNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("Campanha não encontrada com o sqCampanha: " + sqCampanha);
+            respostaRequisicao.setMensagem("Campanha não encontrada com o sqCampanha: " + sqCampanha);
+            return ResponseEntity.badRequest().body(respostaRequisicao);
+        }catch (Exception e) {
+            e.printStackTrace();
+            respostaRequisicao.setMensagem("Houve um problema ao processar a requisição.");
+            return ResponseEntity.badRequest().body(respostaRequisicao);
+        }
+    }
+
     public List<PersonagemDTO> montarRetornoPersonagensCampanha(List<Personagem> listaDePersonagens) {
         List<PersonagemDTO> dto = new ArrayList<PersonagemDTO>();
 

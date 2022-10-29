@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface PersonagemRepository extends CrudRepository<Personagem, Long> {
 
-    public List<Personagem> findAllByCampanha(Campanha campanha);
+    public List<Personagem> findAllByCampanhaAndStDeletado(Campanha campanha, String stDeletado);
 }

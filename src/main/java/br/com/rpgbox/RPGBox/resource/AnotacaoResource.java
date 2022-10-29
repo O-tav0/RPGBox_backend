@@ -65,4 +65,30 @@ public class AnotacaoResource {
         }
 
     }
+
+    @DeleteMapping(path="/{sqAnotacao}/deletar", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "novo", notes = "Realiza uma exclusão lógica de um registro de anotacao através do campo ST_DELETADO")
+    @ApiResponses(value = { @ApiResponse(code = 500, message = "Erro interno"),
+            @ApiResponse(code = 200, message = "Registro deletado"),
+            @ApiResponse(code = 400, message = "Problema no processamento")})
+    public ResponseEntity<RespostaVO> deletarAnotacao(@PathVariable Long sqAnotacao) {
+
+        RespostaVO respostaRequisicao = new RespostaVO();
+
+        try {
+            anotacaoService.deletarAnotacao(sqAnotacao);
+            respostaRequisicao.setMensagem("Anotacao deletada com sucesso!");
+            return ResponseEntity.ok(respostaRequisicao);
+
+        }catch(EntityNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("Anotacao não encontrada com o sqCampanha: " + sqAnotacao);
+            respostaRequisicao.setMensagem("Anotacao não encontrada com o sqCampanha: " + sqAnotacao);
+            return ResponseEntity.badRequest().body(respostaRequisicao);
+        }catch (Exception e) {
+            e.printStackTrace();
+            respostaRequisicao.setMensagem("Houve um problema ao processar a requisição.");
+            return ResponseEntity.badRequest().body(respostaRequisicao);
+        }
+    }
 }

@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface AnotacaoRepository extends CrudRepository<Anotacao, Long> {
 
-    List<Anotacao> findAllByCampanha(Campanha campanha);
+    List<Anotacao> findAllByCampanhaAndStDeletado(Campanha campanha, String stDeletado);
 }

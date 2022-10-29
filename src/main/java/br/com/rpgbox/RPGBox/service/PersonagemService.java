@@ -5,8 +5,10 @@ import br.com.rpgbox.RPGBox.DTO.PersonagemDTO;
 import br.com.rpgbox.RPGBox.VO.HabilidadeVO;
 import br.com.rpgbox.RPGBox.VO.PersonagemVO;
 import br.com.rpgbox.RPGBox.entity.Campanha;
+import br.com.rpgbox.RPGBox.entity.Combate;
 import br.com.rpgbox.RPGBox.entity.Habilidade;
 import br.com.rpgbox.RPGBox.entity.Personagem;
+import br.com.rpgbox.RPGBox.enums.SituacaoDeletadoEnum;
 import br.com.rpgbox.RPGBox.enums.TipoDePersonagem;
 import br.com.rpgbox.RPGBox.repository.HabilidadeRepository;
 import br.com.rpgbox.RPGBox.repository.PersonagemRepository;
@@ -14,8 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class PersonagemService {
@@ -144,5 +148,17 @@ public class PersonagemService {
             }
         }
         return imgRetorno;
+    }
+
+    public void deletarPersonagem(Long sqPersonagem) throws EntityNotFoundException {
+        Personagem personagem = personagemRepository.findById(sqPersonagem).get();
+        SituacaoDeletadoEnum situacao = new SituacaoDeletadoEnum(SituacaoDeletadoEnum.SituacaoEnum.SIM);
+
+        if(Objects.nonNull(personagem)) {
+            personagem.setStDeletado(situacao.getSituacao());
+            personagemRepository.save(personagem);
+        } else {
+            throw new EntityNotFoundException();
+        }
     }
 }
