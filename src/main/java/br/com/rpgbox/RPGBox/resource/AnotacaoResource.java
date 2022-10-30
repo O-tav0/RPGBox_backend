@@ -91,4 +91,30 @@ public class AnotacaoResource {
             return ResponseEntity.badRequest().body(respostaRequisicao);
         }
     }
+
+    @PutMapping(path="/{sqAnotacao}/alterar", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "novo", notes = "Atualiza o registro de uma anotação.")
+    @ApiResponses(value = { @ApiResponse(code = 500, message = "Erro interno"),
+            @ApiResponse(code = 200, message = "Registro alterado com sucesso"),
+            @ApiResponse(code = 400, message = "Problema no processamento")})
+    public ResponseEntity<RespostaVO> alterarAnotacao(@PathVariable Long sqAnotacao, @RequestBody AnotacaoVO anotacaoAtualizada) {
+
+        RespostaVO respostaRequisicao = new RespostaVO();
+
+        try {
+            anotacaoService.alterarAnotacao(sqAnotacao, anotacaoAtualizada);
+            respostaRequisicao.setMensagem("Anotacao atualizada com sucesso!");
+            return ResponseEntity.ok(respostaRequisicao);
+
+        }catch(EntityNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("Anotacao não encontrada com o sqCampanha: " + sqAnotacao);
+            respostaRequisicao.setMensagem("Anotacao não encontrada com o sqCampanha: " + sqAnotacao);
+            return ResponseEntity.badRequest().body(respostaRequisicao);
+        }catch (Exception e) {
+            e.printStackTrace();
+            respostaRequisicao.setMensagem("Houve um problema ao processar a requisição.");
+            return ResponseEntity.badRequest().body(respostaRequisicao);
+        }
+    }
 }

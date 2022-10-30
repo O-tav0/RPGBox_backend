@@ -3,6 +3,7 @@ package br.com.rpgbox.RPGBox.service;
 import br.com.rpgbox.RPGBox.DTO.CampanhaDTO;
 import br.com.rpgbox.RPGBox.DTO.PersonagemDTO;
 import br.com.rpgbox.RPGBox.DTO.PersonagensCampanhaDTO;
+import br.com.rpgbox.RPGBox.VO.AtualizaCampanhaVO;
 import br.com.rpgbox.RPGBox.VO.CampanhaVO;
 import br.com.rpgbox.RPGBox.entity.*;
 import br.com.rpgbox.RPGBox.enums.SituacaoDeletadoEnum;
@@ -141,6 +142,20 @@ public class CampanhaService {
 
         if(Objects.nonNull(campanha)) {
             campanha.setStDeletado(situacao.getSituacao());
+            campanhaRepository.save(campanha);
+        } else {
+            throw new EntityNotFoundException();
+        }
+    }
+
+    public void atualizarCampanha(Long sqCampanha, AtualizaCampanhaVO campanhaAtualizada) throws EntityNotFoundException {
+        Campanha campanha = campanhaRepository.findById(sqCampanha).get();
+
+        if(Objects.nonNull(campanha)) {
+            campanha.setTituloCampanha(campanhaAtualizada.getTituloCampanha());
+            campanha.setImagemCampanha(campanhaAtualizada.getImagemCampanha());
+            campanha.setDescricaoCampanha(campanhaAtualizada.getDescricaoCampanha());
+
             campanhaRepository.save(campanha);
         } else {
             throw new EntityNotFoundException();

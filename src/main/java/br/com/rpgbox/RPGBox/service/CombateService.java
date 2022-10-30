@@ -243,4 +243,20 @@ public class CombateService {
             throw new EntityNotFoundException();
         }
     }
+
+    public void atualizarCombate(Long sqCampanha, AtualizaCombateVO combateAtualizado) throws EntityNotFoundException {
+        Combate combate = combateRepository.findById(sqCampanha).get();
+
+        if(Objects.nonNull(combate)) {
+            combate.setTituloCombate(combateAtualizado.getTituloCombate());
+            List<PersonagemCombate> personagensDoCombate = preencherPersonagensDoCombate(combateAtualizado.getPersonagensCombate(), combate);
+            combate.setPersonagensDoCombate(personagensDoCombate);
+
+            combateRepository.save(combate);
+        } else {
+            throw new EntityNotFoundException();
+        }
+    }
+
+
 }

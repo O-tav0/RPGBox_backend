@@ -2,10 +2,7 @@ package br.com.rpgbox.RPGBox.service;
 
 import br.com.rpgbox.RPGBox.DTO.AnotacaoDTO;
 import br.com.rpgbox.RPGBox.VO.AnotacaoVO;
-import br.com.rpgbox.RPGBox.entity.Anotacao;
-import br.com.rpgbox.RPGBox.entity.Campanha;
-import br.com.rpgbox.RPGBox.entity.Combate;
-import br.com.rpgbox.RPGBox.entity.EventoCampanha;
+import br.com.rpgbox.RPGBox.entity.*;
 import br.com.rpgbox.RPGBox.enums.SituacaoDeletadoEnum;
 import br.com.rpgbox.RPGBox.repository.AnotacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class AnotacaoService {
@@ -58,6 +53,13 @@ public class AnotacaoService {
         List<AnotacaoDTO> listaRetorno = new ArrayList<AnotacaoDTO>();
         List<Anotacao> anotacoesDaCampanha = anotacaoRepository.findAllByCampanhaAndStDeletado(campanha, null);
 
+        Collections.sort(anotacoesDaCampanha, new Comparator<Anotacao>() {
+            @Override
+            public int compare(Anotacao u1, Anotacao u2) {
+                return u1.getSqAnotacao().compareTo(u2.getSqAnotacao());
+            }
+        });
+
         for(Anotacao anotacao: anotacoesDaCampanha) {
             listaRetorno.add(converteEmDTO(anotacao));
         }
@@ -80,6 +82,17 @@ public class AnotacaoService {
 
         if(Objects.nonNull(anotacao)) {
             anotacao.setStDeletado(situacao.getSituacao());
+            anotacaoRepository.save(anotacao);
+        } else {
+            throw new EntityNotFoundException();
+        }
+    }
+
+    public void alterarAnotacao(Long sqAnotacao, AnotacaoVO anotacaoAtualizada) throws EntityNotFoundException {
+        Anotacao anotacao = anotacaoRepository.findById(sqAnotacao).get();
+
+        if(Objects.nonNull(anotacao)) {
+            anotacao.setDsAnotacao(anotacaoAtualizada.getAnotacao());
             anotacaoRepository.save(anotacao);
         } else {
             throw new EntityNotFoundException();

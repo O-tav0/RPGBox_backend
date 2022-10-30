@@ -1,10 +1,7 @@
 package br.com.rpgbox.RPGBox.resource;
 
 import br.com.rpgbox.RPGBox.DTO.CombateDTO;
-import br.com.rpgbox.RPGBox.VO.CombateLog;
-import br.com.rpgbox.RPGBox.VO.CombateVO;
-import br.com.rpgbox.RPGBox.VO.RespostaVO;
-import br.com.rpgbox.RPGBox.VO.ResumoCombateVO;
+import br.com.rpgbox.RPGBox.VO.*;
 import br.com.rpgbox.RPGBox.service.CombateService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -109,6 +106,27 @@ public class CombateResource {
             respostaRequisicao.setMensagem("Combate não encontrada com o sqCombate: " + sqCombate);
             return ResponseEntity.badRequest().body(respostaRequisicao);
         }catch (Exception e) {
+            e.printStackTrace();
+            respostaRequisicao.setMensagem("Houve um problema ao processar a requisição.");
+            return ResponseEntity.badRequest().body(respostaRequisicao);
+        }
+    }
+
+    @PutMapping(path="/{sqCombate}/atualizar", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "novo", notes = "Atualiza o Registro de um combate")
+    @ApiResponses(value = { @ApiResponse(code = 500, message = "Erro interno"),
+            @ApiResponse(code = 200, message = "Requisição concluída com sucesso"),
+            @ApiResponse(code = 400, message = "Problema no processamento")})
+    public ResponseEntity<RespostaVO> AtualizarCampanha(@PathVariable Long sqCombate, @RequestBody AtualizaCombateVO combateAtualizado) {
+
+        RespostaVO respostaRequisicao = new RespostaVO();
+
+        try {
+            combateService.atualizarCombate(sqCombate, combateAtualizado);
+            respostaRequisicao.setMensagem("Combate atualizado com sucesso!");
+            return ResponseEntity.ok(respostaRequisicao);
+
+        } catch (Exception e) {
             e.printStackTrace();
             respostaRequisicao.setMensagem("Houve um problema ao processar a requisição.");
             return ResponseEntity.badRequest().body(respostaRequisicao);
