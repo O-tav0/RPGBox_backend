@@ -2,6 +2,7 @@ package br.com.rpgbox.RPGBox.service;
 
 import br.com.rpgbox.RPGBox.DTO.HabilidadeDTO;
 import br.com.rpgbox.RPGBox.DTO.PersonagemDTO;
+import br.com.rpgbox.RPGBox.VO.AtualizaPersonagemVO;
 import br.com.rpgbox.RPGBox.VO.HabilidadeVO;
 import br.com.rpgbox.RPGBox.VO.PersonagemVO;
 import br.com.rpgbox.RPGBox.entity.Campanha;
@@ -159,6 +160,36 @@ public class PersonagemService {
             personagemRepository.save(personagem);
         } else {
             throw new EntityNotFoundException();
+        }
+    }
+
+    public void atualizarPersonagem(Long sqPersonagem, AtualizaPersonagemVO personagemAtualizado) throws EntityNotFoundException {
+        Personagem personagem = personagemRepository.findById(sqPersonagem).get();
+
+        if(Objects.nonNull(personagem)) {
+            personagem.setRacaPersonagem(personagemAtualizado.getRacaPersonagem());
+            personagem.setNivelPersonagem(personagemAtualizado.getNivelPersonagem());
+            personagem.setTipoPersonagem(tipoPersonagemService.buscarTipoPersonagem(personagemAtualizado.getTipoPersonagem()));
+            personagem.setNomePersonagem(personagemAtualizado.getNomePersonagem());
+            personagem.setClassePersonagem(personagemAtualizado.getClassePersonagem());
+
+            List<Habilidade> habilidadesAtualizadas = preencherHabilidadesPersonagem(personagemAtualizado.getHabilidadesPersonagem(), personagem);
+
+            personagem.setHabilidadesPersonagem(habilidadesAtualizadas);
+            personagem.setPontosDeVida(personagemAtualizado.getPontosVida());
+            personagem.setImagemPersonagem(tratarImagemPersonagem(personagemAtualizado.getImagem(), personagemAtualizado.getTipoPersonagem()));
+
+            habilidadeService.deletarHabilidadesPersonagem(personagem);
+            atualizarHabilidadesDoPersonagem(habilidadesAtualizadas);
+            personagemRepository.save(personagem);
+        } else {
+            throw new EntityNotFoundException();
+        }
+    }
+
+    public void atualizarHabilidadesDoPersonagem(List<Habilidade> habilidadesParaSalvar) {
+        for(Habilidade habilidade: habilidadesParaSalvar) {
+            habilidadeRepository.save(habilidade);
         }
     }
 }

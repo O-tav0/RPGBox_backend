@@ -252,10 +252,23 @@ public class CombateService {
             List<PersonagemCombate> personagensDoCombate = preencherPersonagensDoCombate(combateAtualizado.getPersonagensCombate(), combate);
             combate.setPersonagensDoCombate(personagensDoCombate);
 
+            deletarPersonagensDoCombate(combate);
+            atualizarIntegrantesDoCombate(personagensDoCombate);
+
             combateRepository.save(combate);
         } else {
             throw new EntityNotFoundException();
         }
+    }
+
+    public void atualizarIntegrantesDoCombate(List<PersonagemCombate> personagensDoCombate) {
+        for(PersonagemCombate personagem: personagensDoCombate) {
+            personagemCombateRepository.save(personagem);
+        }
+    }
+
+    public void deletarPersonagensDoCombate(Combate combate) {
+        personagemCombateRepository.deleteAllByCombate(combate);
     }
 
 

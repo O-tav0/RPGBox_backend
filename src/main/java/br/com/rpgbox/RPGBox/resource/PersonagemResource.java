@@ -1,5 +1,7 @@
 package br.com.rpgbox.RPGBox.resource;
 
+import br.com.rpgbox.RPGBox.VO.AtualizaCombateVO;
+import br.com.rpgbox.RPGBox.VO.AtualizaPersonagemVO;
 import br.com.rpgbox.RPGBox.VO.PersonagemVO;
 import br.com.rpgbox.RPGBox.VO.RespostaVO;
 import br.com.rpgbox.RPGBox.entity.Personagem;
@@ -83,6 +85,27 @@ public class PersonagemResource {
             respostaRequisicao.setMensagem("Anotacao não encontrada com o sqPersonagem: " + sqPersonagem);
             return ResponseEntity.badRequest().body(respostaRequisicao);
         }catch (Exception e) {
+            e.printStackTrace();
+            respostaRequisicao.setMensagem("Houve um problema ao processar a requisição.");
+            return ResponseEntity.badRequest().body(respostaRequisicao);
+        }
+    }
+
+    @PutMapping(path="/{sqPersonagem}/atualizar", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "novo", notes = "Atualiza o Registro de um personagem")
+    @ApiResponses(value = { @ApiResponse(code = 500, message = "Erro interno"),
+            @ApiResponse(code = 200, message = "Requisição concluída com sucesso"),
+            @ApiResponse(code = 400, message = "Problema no processamento")})
+    public ResponseEntity<RespostaVO> AtualizarCampanha(@PathVariable Long sqPersonagem, @RequestBody AtualizaPersonagemVO personagemAtualizado) {
+
+        RespostaVO respostaRequisicao = new RespostaVO();
+
+        try {
+            personagemService.atualizarPersonagem(sqPersonagem, personagemAtualizado);
+            respostaRequisicao.setMensagem("Personagem atualizado com sucesso!");
+            return ResponseEntity.ok(respostaRequisicao);
+
+        } catch (Exception e) {
             e.printStackTrace();
             respostaRequisicao.setMensagem("Houve um problema ao processar a requisição.");
             return ResponseEntity.badRequest().body(respostaRequisicao);
