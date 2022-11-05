@@ -1,6 +1,7 @@
 package br.com.rpgbox.RPGBox.resource;
 
 import br.com.rpgbox.RPGBox.DTO.CombateDTO;
+import br.com.rpgbox.RPGBox.DTO.PersonagemDTO;
 import br.com.rpgbox.RPGBox.VO.*;
 import br.com.rpgbox.RPGBox.service.CombateService;
 import io.swagger.annotations.ApiOperation;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -129,6 +131,54 @@ public class CombateResource {
         } catch (Exception e) {
             e.printStackTrace();
             respostaRequisicao.setMensagem("Houve um problema ao processar a requisição.");
+            return ResponseEntity.badRequest().body(respostaRequisicao);
+        }
+    }
+
+    @GetMapping(path="/{sqCombate}/personagens", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "novo", notes = "Busca os personagens de determinado combate")
+    @ApiResponses(value = { @ApiResponse(code = 500, message = "Erro interno"),
+            @ApiResponse(code = 200, message = "Requisição concluída com sucesso"),
+            @ApiResponse(code = 400, message = "Problema no processamento")})
+    public ResponseEntity<RespostaVO> buscarPersonagens(@PathVariable Long sqCombate) {
+
+        RespostaVO respostaRequisicao = new RespostaVO();
+
+        try {
+            List<PersonagemDTO> dto = combateService.buscarIntegrantesDeCombate(sqCombate);
+            respostaRequisicao.setObjetoResposta(dto);
+            return ResponseEntity.ok(respostaRequisicao);
+        } catch(EntityNotFoundException etf) {
+            etf.printStackTrace();
+            respostaRequisicao.setMensagem("Combate não encontrado!");
+            return ResponseEntity.badRequest().body(respostaRequisicao);
+        } catch(Exception e) {
+            e.printStackTrace();
+            respostaRequisicao.setMensagem(e.getMessage());
+            return ResponseEntity.badRequest().body(respostaRequisicao);
+        }
+    }
+
+    @GetMapping(path="/{sqCombate}/personagens-disponiveis", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "novo", notes = "Busca personagens disponíveis para entrar em um combate")
+    @ApiResponses(value = { @ApiResponse(code = 500, message = "Erro interno"),
+            @ApiResponse(code = 200, message = "Requisição concluída com sucesso"),
+            @ApiResponse(code = 400, message = "Problema no processamento")})
+    public ResponseEntity<RespostaVO> buscarPersonagensDisponiveis(@PathVariable Long sqCombate) {
+
+        RespostaVO respostaRequisicao = new RespostaVO();
+
+        try {
+            List<PersonagemDTO> dto = combateService.buscarPersonagensDisponiveisProCombate(sqCombate);
+            respostaRequisicao.setObjetoResposta(dto);
+            return ResponseEntity.ok(respostaRequisicao);
+        } catch(EntityNotFoundException etf) {
+            etf.printStackTrace();
+            respostaRequisicao.setMensagem("Combate não encontrado!");
+            return ResponseEntity.badRequest().body(respostaRequisicao);
+        } catch(Exception e) {
+            e.printStackTrace();
+            respostaRequisicao.setMensagem(e.getMessage());
             return ResponseEntity.badRequest().body(respostaRequisicao);
         }
     }

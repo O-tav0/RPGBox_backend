@@ -244,8 +244,8 @@ public class CombateService {
         }
     }
 
-    public void atualizarCombate(Long sqCampanha, AtualizaCombateVO combateAtualizado) throws EntityNotFoundException {
-        Combate combate = combateRepository.findById(sqCampanha).get();
+    public void atualizarCombate(Long sqCombate, AtualizaCombateVO combateAtualizado) throws EntityNotFoundException {
+        Combate combate = combateRepository.findById(sqCombate).get();
 
         if(Objects.nonNull(combate)) {
             combate.setTituloCombate(combateAtualizado.getTituloCombate());
@@ -271,5 +271,53 @@ public class CombateService {
         personagemCombateRepository.deleteAllByCombate(combate);
     }
 
+    public List<PersonagemDTO> buscarIntegrantesDeCombate(Long sqCombate) {
+        Combate combate = combateRepository.findById(sqCombate).get();
+        List<PersonagemDTO> listaRetorno = new ArrayList<PersonagemDTO>();
 
+        Collections.sort(combate.getPersonagensDoCombate(), new Comparator<PersonagemCombate>() {
+            @Override
+            public int compare(PersonagemCombate u1, PersonagemCombate u2) {
+                return u1.getNrOrdemCombate().compareTo(u2.getNrOrdemCombate());
+            }
+        });
+
+        for(PersonagemCombate personagemCombate: combate.getPersonagensDoCombate()) {
+            PersonagemDTO dto = personagemService.converteEmDTO(personagemCombate.getPersonagem());
+            listaRetorno.add(dto);
+        }
+        return listaRetorno;
+    }
+
+    public List<PersonagemDTO> buscarPersonagensDisponiveisProCombate(Long sqCombate) {
+        Combate combate = combateRepository.findById(sqCombate).get();
+        List<PersonagemDTO> personagensCombateDTO = new ArrayList<PersonagemDTO>();
+        List<Personagem> personagensDaCampanha = new ArrayList<Personagem>();
+        List<PersonagemDTO> personagensDaCampanhaDTO = new ArrayList<PersonagemDTO>();
+
+        Collections.sort(combate.getPersonagensDoCombate(), new Comparator<PersonagemCombate>() {
+            @Override
+            public int compare(PersonagemCombate u1, PersonagemCombate u2) {
+                return u1.getNrOrdemCombate().compareTo(u2.getNrOrdemCombate());
+            }
+        });
+
+        for(PersonagemCombate personagemCombate: combate.getPersonagensDoCombate()) {
+            PersonagemDTO dto = personagemService.converteEmDTO(personagemCombate.getPersonagem());
+            personagensCombateDTO.add(dto);
+        }
+
+        personagensDaCampanha = campanhaService.buscarPersonagensDaCampanha(combate.getCampanha().getSqCampanha());
+
+        for(Personagem entidade: personagensDaCampanha) {
+            PersonagemDTO dto = personagemService.converteEmDTO(entidade);
+            personagensDaCampanhaDTO.add(dto);
+        }
+
+        for(PersonagemDTO personagemCombate: personagensCombateDTO) {
+            personagensDaCampanhaDTO.removeIf(personagemCampanha -> personagemCombate.getSqPersonagem().equals(personagemCampanha.getSqPersonagem()));
+        }
+
+        return personagensDaCampanhaDTO;
+    }
 }
