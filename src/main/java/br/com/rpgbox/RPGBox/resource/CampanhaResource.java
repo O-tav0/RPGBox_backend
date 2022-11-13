@@ -208,7 +208,7 @@ public class CampanhaResource {
 
         try {
             campanhaService.deletarCampanha(sqCampanha);
-            respostaRequisicao.setMensagem("Campanha deletada com sucesso!");
+            respostaRequisicao.setMensagem("Campanha excluída com sucesso!");
             return ResponseEntity.ok(respostaRequisicao);
 
         }catch(EntityNotFoundException e) {
