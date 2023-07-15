@@ -18,7 +18,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
-public class AutenticacaoController {
+public class AutenticacaoResource {
 
     @Autowired
     AutenticacaoService authServices;
@@ -33,19 +33,6 @@ public class AutenticacaoController {
         if (token == null) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request!");
         return token;
     }
-
-    @GetMapping(value = "/senha")
-    public ResponseEntity getSenha(@RequestParam String senha) {
-        Map<String, PasswordEncoder> encoders = new HashMap<>();
-        encoders.put("pbkdf2", new Pbkdf2PasswordEncoder());
-        DelegatingPasswordEncoder passwordEncoder = new DelegatingPasswordEncoder("pbkdf2", encoders);
-        passwordEncoder.setDefaultPasswordEncoderForMatches(new Pbkdf2PasswordEncoder());
-
-        String result = passwordEncoder.encode(senha);
-        return ResponseEntity.ok(result);
-    }
-
-
 
     @SuppressWarnings("rawtypes")
     @Operation(summary = "Refresh token for authenticated user and returns a token")

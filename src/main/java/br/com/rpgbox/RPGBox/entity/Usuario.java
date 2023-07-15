@@ -1,5 +1,6 @@
 package br.com.rpgbox.RPGBox.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,18 +38,23 @@ public class Usuario implements UserDetails, Serializable {
       @Column(name="DS_CAMINHO_IMAGEM")
       private String caminhoImagem;
 
+      @JsonIgnore
       @Column(name="ST_CONTA_NAO_EXPIRADA")
       private Boolean contaNaoExpirada;
 
+      @JsonIgnore
       @Column(name="ST_CONTA_NAO_BLOQUEADA")
       private Boolean contaNaoBloqueada;
 
+      @JsonIgnore
       @Column(name="ST_CREDENCIAIS_NAO_BLOQUEADAS")
       private Boolean credenciaisNaoExpiradas;
 
+      @JsonIgnore
       @Column(name="ST_ATIVADO")
       private Boolean isHabilitado;
 
+      @JsonIgnore
       @ManyToMany(fetch = FetchType.EAGER)
       @JoinTable(name = "tb_permissao_usuario", joinColumns = {@JoinColumn (name = "sq_usuario")},
               inverseJoinColumns = {@JoinColumn (name = "sq_permissao")}
