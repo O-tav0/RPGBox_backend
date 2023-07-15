@@ -1,5 +1,6 @@
 package br.com.rpgbox.RPGBox.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,7 @@ public class Campanha {
 
     @JoinColumn(name="SQ_USUARIO")
     @OneToOne
+    @JsonIgnore
     private Usuario usuario;
 
     @Column(name="ST_DELETADO")

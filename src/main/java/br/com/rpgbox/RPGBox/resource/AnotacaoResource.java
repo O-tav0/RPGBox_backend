@@ -17,7 +17,7 @@ import javax.persistence.EntityNotFoundException;
 
 
 @RestController()
-@RequestMapping("/anotacao")
+@RequestMapping("/api/anotacao")
 public class AnotacaoResource {
 
     @Autowired

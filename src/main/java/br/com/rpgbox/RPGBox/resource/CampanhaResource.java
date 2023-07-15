@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController()
-@RequestMapping("/campanha")
+@RequestMapping("/api/campanha")
 public class CampanhaResource {
 
     @Autowired

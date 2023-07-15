@@ -17,7 +17,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/combates")
+@RequestMapping("/api/combates")
 public class CombateResource {
 
     @Autowired

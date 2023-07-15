@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController()
-@RequestMapping("/eventos")
+@RequestMapping("/api/eventos")
 public class EventoCampanhaResource {
 
     private RespostaVO respostaRequisicao;

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityNotFoundException;
 
 @RestController()
-@RequestMapping("/personagem")
+@RequestMapping("/api/personagem")
 public class PersonagemResource {
 
     @Autowired

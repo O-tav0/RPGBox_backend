@@ -1,4 +1,4 @@
-package br.com.rpgbox.RPGBox;
+package br.com.rpgbox.RPGBox.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
